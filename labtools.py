@@ -86,7 +86,7 @@ def omega_c_channel_proj_metadata(netcdf_path):
         'bbox': None,
         'datetime': datetime.fromisoformat(nc_dataset.variables['start_time'].getValue()),
         'properties': {},
-        'collection': 'omega_c_channel_proj',
+        'collection': 'omega-c-channel-proj',
         'ssys:targets': ['Mars']
     }
 
@@ -95,7 +95,8 @@ def genstac(input_data_dir, output_stac_dir='catalogs'):
     """
     # Data files to be processed can come from an index file, or resulting from a glob search
     # for NetCDF data products.
-    # TODO: must be generalised to all OMEGA collections
+    # TODO: must be generalised later to all OMEGA collections
+    print('>',input_data_dir)
     data_files = list(Path(input_data_dir).glob('**/*.nc'))
     print(data_files)
 
@@ -148,6 +149,7 @@ def genstac(input_data_dir, output_stac_dir='catalogs'):
             extra_fields={'ssys:targets': item_metadata['ssys:targets']},
             collection=item_metadata['collection']
         )
+        print(stac_item)
         stac_collection.add_item(stac_item)
 
     # update collection extent and add to catalog
@@ -156,6 +158,7 @@ def genstac(input_data_dir, output_stac_dir='catalogs'):
 
     # save catalog
     output_stac_dir = str(Path(output_stac_dir) / collection_dict['id'])
+    print(output_stac_dir)
     stac_catalog.normalize_hrefs(output_stac_dir)
     stac_catalog.save(catalog_type=pystac.CatalogType.SELF_CONTAINED)
 
@@ -164,11 +167,12 @@ if __name__ == '__main__':
     #     force = True
     # else:
     #     force = False
+
+    # set collection ID / directory process
     collection_id = 'omega_c_channel_proj'
 
-    collection_data_dir = Path(INPUT_DATA_DIR) / collection_id
+    collection_data_dir = Path(INPUT_DATA_DIR) / 'mars' / collection_id
     if not collection_data_dir.exists():
-        print(f'Input data collection directory not found: {collection_data_dir}')
-        exit()
-
-    genstac(collection_data_dir)
+        print(f'ERROR: Input data collection directory not found: {collection_data_dir}')
+    else:
+        genstac(str(collection_data_dir))

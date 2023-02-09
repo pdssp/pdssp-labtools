@@ -8,7 +8,7 @@
       "rel": "root",
       "href": "./catalog.json",
       "type": "application/json",
-      "title": "Lab STAC catalog"
+      "title": "PDSSP Lab STAC Catalog"
     },
     {
       "rel": "child",
@@ -23,5 +23,5 @@
   "ssys:targets": [
     "Mars"
   ],
-  "title": "Lab STAC catalog"
+  "title": "PDSSP Lab STAC Catalog"
 }
