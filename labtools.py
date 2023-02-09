@@ -13,11 +13,11 @@ from contextlib import closing
 INPUT_DATA_DIR = '/Users/nmanaud/workspace/pdssp/idoc_data'
 OUTPUT_STAC_DIR = './catalogs'
 
-with closing(requests.get('http://psup.ias.u-psud.fr/ds/omega_c_channel/records')) as r:
-    if r.ok:
-        response = r.json()
-    else:
-        raise Exception(f'Dommage...')
+# with closing(requests.get('http://psup.ias.u-psud.fr/ds/omega_c_channel/records')) as r:
+#     if r.ok:
+#         response = r.json()
+#     else:
+#         raise Exception(f'Dommage...')
 
 def omega_c_channel_proj_footprint(netcdf_path) -> Polygon:
     """Returns the GeoJSON Geometry of a OMEGA_C_Channel_Proj NetCDF data product.
@@ -101,7 +101,7 @@ def genstac(input_data_dir, output_stac_dir='catalogs'):
 
     catalog_dict = {
         'id': 'pdssp-lab-catalog',
-        'title': 'Lab STAC catalog',
+        'title': 'PDSSP Lab STAC Catalog',
         'description': '',
         'stac_extensions': ['ssys'],
         'ssys:target': ['Mars']
@@ -111,7 +111,8 @@ def genstac(input_data_dir, output_stac_dir='catalogs'):
         'id': 'omega_c_channel_proj',
         'stac_extensions': ['ssys'],
         'title': 'OMEGA observations acquired with the C channels, projected',
-        'description': '',
+        'description': 'These data cubes have been specifically selected and filtered for'
+                       ' studies of the surface mineralogy between 1 and 2.5 µm. ',
         'license': 'Licence TBD',
         'ssys:targets': ['Mars']
     }
@@ -163,5 +164,11 @@ if __name__ == '__main__':
     #     force = True
     # else:
     #     force = False
-    pass
-    # genstac('data/mars/omega_c_channel_proj')
+    collection_id = 'omega_c_channel_proj'
+
+    collection_data_dir = Path(INPUT_DATA_DIR) / collection_id
+    if not collection_data_dir.exists():
+        print(f'Input data collection directory not found: {collection_data_dir}')
+        exit()
+
+    genstac(collection_data_dir)

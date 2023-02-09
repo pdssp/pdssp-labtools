@@ -2,29 +2,19 @@
   "type": "Collection",
   "id": "omega_c_channel_proj",
   "stac_version": "1.0.0",
-  "description": "",
+  "description": "These data cubes have been specifically selected and filtered for studies of the surface mineralogy between 1 and 2.5 \u00b5m. ",
   "links": [
     {
       "rel": "root",
       "href": "../catalog.json",
       "type": "application/json",
-      "title": "Lab STAC catalog"
-    },
-    {
-      "rel": "item",
-      "href": "./7462_2/7462_2.json",
-      "type": "application/json"
-    },
-    {
-      "rel": "item",
-      "href": "./5177_3/5177_3.json",
-      "type": "application/json"
+      "title": "PDSSP Lab STAC Catalog"
     },
     {
       "rel": "parent",
       "href": "../catalog.json",
       "type": "application/json",
-      "title": "Lab STAC catalog"
+      "title": "PDSSP Lab STAC Catalog"
     }
   ],
   "stac_extensions": [
@@ -48,8 +38,8 @@
     "temporal": {
       "interval": [
         [
-          "2008-01-12T23:58:53.037000Z",
-          "2009-10-27T17:15:54.009000Z"
+          null,
+          null
         ]
       ]
     }
