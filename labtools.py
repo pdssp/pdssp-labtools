@@ -9,21 +9,16 @@ import pystac
 from datetime import datetime
 import requests
 from contextlib import closing
+# from tqdm import tqdm
+from urllib.request import urlretrieve
 
 INPUT_DATA_DIR = '/Users/nmanaud/workspace/pdssp/idoc_data'
 OUTPUT_STAC_DIR = './catalogs'
 
-# with closing(requests.get('http://psup.ias.u-psud.fr/ds/omega_c_channel/records')) as r:
-#     if r.ok:
-#         response = r.json()
-#     else:
-#         raise Exception(f'Dommage...')
 
 def omega_c_channel_proj_footprint(netcdf_path) -> Polygon:
     """Returns the GeoJSON Geometry of a OMEGA_C_Channel_Proj NetCDF data product.
     """
-    # test_nc_data = './data/mars/omega_c_channel_proj/5177_3.nc'
-    # test_nc_data = './data/mars/omega_c_channel_proj/7462_2.nc'
     nc_dataset = netCDF4.Dataset(netcdf_path, 'r')
     alt = nc_dataset.variables['altitude']
     latitudes = nc_dataset.variables['latitude']
@@ -90,15 +85,49 @@ def omega_c_channel_proj_metadata(netcdf_path):
         'ssys:targets': ['Mars']
     }
 
-def genstac(input_data_dir, output_stac_dir='catalogs'):
+def load_colletion_index(collection_id):
+    """Returns"""
+    records =[]
+    psup_url = ''
+    if collection_id == 'omega_c_channel_proj':
+        psup_url = 'http://psup.ias.u-psud.fr/ds/omega_c_channel/records'
+
+    with closing(requests.get(psup_url)) as r:
+        if r.ok:
+            response = r.json()
+            if 'data' in response.keys():
+                records = response['data']
+            else:
+                Exception('Invalid PSUP response: no "data" key found.')
+        else:
+            raise Exception(f'Invalid PSUP response.')
+
+    for record in records:
+        # update record with product id, derived from data download path
+        product_id = Path(record['download_nc']).stem
+        if product_id:
+            record['id'] = product_id
+
+    return records
+
+# def download_data(url, path):
+#     response = requests.get(url, stream=True)
+#     from urllib.request import urlretrieve
+#     urlretrieve
+#     with open(path, "wb") as handle:
+#         for data in tqdm(response.iter_content()):
+#             handle.write(data)
+
+# def genstac(input_data_dir, output_stac_dir='catalogs'):
+def genstac(collection_index, output_stac_dir='catalogs'):
     """Generate a STAC catalog containing one collection, associated to input data directory.
     """
     # Data files to be processed can come from an index file, or resulting from a glob search
     # for NetCDF data products.
     # TODO: must be generalised later to all OMEGA collections
-    print('>',input_data_dir)
-    data_files = list(Path(input_data_dir).glob('**/*.nc'))
-    print(data_files)
+    # print('>',input_data_dir)
+    # data_files = list(Path(input_data_dir).glob('**/*.nc'))
+    # print(data_files)
 
     catalog_dict = {
         'id': 'pdssp-lab-catalog',
@@ -113,7 +142,7 @@ def genstac(input_data_dir, output_stac_dir='catalogs'):
         'stac_extensions': ['ssys'],
         'title': 'OMEGA observations acquired with the C channels, projected',
         'description': 'These data cubes have been specifically selected and filtered for'
-                       ' studies of the surface mineralogy between 1 and 2.5 µm. ',
+                       ' studies of the surface mineralogy between 1 and 2.5 microns.',
         'license': 'Licence TBD',
         'ssys:targets': ['Mars']
     }
@@ -137,15 +166,22 @@ def genstac(input_data_dir, output_stac_dir='catalogs'):
     )
 
     # write STAC item
-    for data_file in data_files:
+    for product in collection_index:
+        data_file = product['local_path']
         item_metadata = omega_c_channel_proj_metadata(data_file)
+        bbox = [
+            (float(product['westernmost_longitude'])+ 180.0) % 360.0 - 180.0,
+            float(product['minimum_latitude']),
+            (float(product['easternmost_longitude'])+ 180.0) % 360.0 - 180.0,
+            float(product['maximum_latitude'])
+        ]
         stac_item = pystac.Item(
             id=item_metadata['id'],
             stac_extensions=item_metadata['stac_extensions'],
             geometry=omega_c_channel_proj_footprint(data_file),
-            bbox=item_metadata['bbox'],
+            bbox=bbox,
             datetime=item_metadata['datetime'],
-            properties=item_metadata['properties'],
+            properties=product,  # item_metadata['properties'],
             extra_fields={'ssys:targets': item_metadata['ssys:targets']},
             collection=item_metadata['collection']
         )
@@ -168,11 +204,27 @@ if __name__ == '__main__':
     # else:
     #     force = False
 
-    # set collection ID / directory process
+    # set collection ID / directory to process
     collection_id = 'omega_c_channel_proj'
-
+    #
     collection_data_dir = Path(INPUT_DATA_DIR) / 'mars' / collection_id
-    if not collection_data_dir.exists():
-        print(f'ERROR: Input data collection directory not found: {collection_data_dir}')
-    else:
-        genstac(str(collection_data_dir))
+    # if not collection_data_dir.exists():
+    #     print(f'ERROR: Input data collection directory not found: {collection_data_dir}')
+    # else:
+    #     genstac(str(collection_data_dir))
+
+    collection_index = load_colletion_index(collection_id)
+    collection_index = collection_index[100:102]  # limit number of products to process
+    for product in collection_index:
+        product_fname =  f'{product["id"]}.nc'
+        product_path = collection_data_dir / product_fname
+        if not product_path.exists():
+            # download data file
+            print(f'Downloading {product_fname} ({product["nc_human_file_size"]}) ...')
+            urlretrieve(product['download_nc'], product_path)
+        product['local_path'] = str(product_path)
+
+    # print(collection_index[0])
+    genstac(collection_index)
+
+    pass

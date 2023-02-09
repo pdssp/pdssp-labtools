@@ -2,7 +2,7 @@
   "type": "Collection",
   "id": "omega_c_channel_proj",
   "stac_version": "1.0.0",
-  "description": "These data cubes have been specifically selected and filtered for studies of the surface mineralogy between 1 and 2.5 \u00b5m. ",
+  "description": "These data cubes have been specifically selected and filtered for studies of the surface mineralogy between 1 and 2.5 microns.",
   "links": [
     {
       "rel": "root",
@@ -12,12 +12,12 @@
     },
     {
       "rel": "item",
-      "href": "./7462_2/7462_2.json",
+      "href": "./0314_2/0314_2.json",
       "type": "application/json"
     },
     {
       "rel": "item",
-      "href": "./5177_3/5177_3.json",
+      "href": "./0314_3/0314_3.json",
       "type": "application/json"
     },
     {
@@ -38,18 +38,18 @@
     "spatial": {
       "bbox": [
         [
-          Infinity,
-          Infinity,
-          -Infinity,
-          -Infinity
+          -13.086999999999989,
+          -1.625,
+          -4.73700000000008,
+          35.6562
         ]
       ]
     },
     "temporal": {
       "interval": [
         [
-          "2008-01-12T23:58:53.037000Z",
-          "2009-10-27T17:15:54.009000Z"
+          "2004-04-18T08:38:44.036000Z",
+          "2004-04-18T08:44:43.039000Z"
         ]
       ]
     }
