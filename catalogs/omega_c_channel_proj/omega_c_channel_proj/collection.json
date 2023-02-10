@@ -12,12 +12,312 @@
     },
     {
       "rel": "item",
+      "href": "./0018_0/0018_0.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0018_1/0018_1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0022_0/0022_0.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0022_1/0022_1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0024_0/0024_0.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0024_1/0024_1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0030_0/0030_0.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0030_1/0030_1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0032_1/0032_1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0032_3/0032_3.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0037_0/0037_0.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0037_1/0037_1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0037_3/0037_3.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0041_2/0041_2.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0041_3/0041_3.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0044_0/0044_0.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0047_1/0047_1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0047_3/0047_3.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0049_1/0049_1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0061_2/0061_2.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0061_4/0061_4.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0068_1/0068_1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0068_3/0068_3.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0068_4/0068_4.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0071_1/0071_1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0071_3/0071_3.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0071_4/0071_4.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0097_1/0097_1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0097_3/0097_3.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0097_4/0097_4.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0100_3/0100_3.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0103_3/0103_3.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0103_5/0103_5.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0171_1/0171_1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0171_2/0171_2.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0228_1/0228_1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0228_2/0228_2.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0231_2/0231_2.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0231_3/0231_3.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0232_1/0232_1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0232_2/0232_2.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0232_3/0232_3.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0243_1/0243_1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0243_2/0243_2.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0243_3/0243_3.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0248_1/0248_1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0248_2/0248_2.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0248_3/0248_3.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0259_1/0259_1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0259_2/0259_2.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0266_1/0266_1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0266_2/0266_2.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0270_1/0270_1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0270_2/0270_2.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0270_3/0270_3.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0278_2/0278_2.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0280_1/0280_1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./0280_2/0280_2.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
       "href": "./0314_2/0314_2.json",
       "type": "application/json"
     },
     {
       "rel": "item",
       "href": "./0314_3/0314_3.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./5177_3/5177_3.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./7462_2/7462_2.json",
       "type": "application/json"
     },
     {
@@ -38,18 +338,18 @@
     "spatial": {
       "bbox": [
         [
-          -13.086999999999989,
-          -1.625,
-          -4.73700000000008,
-          35.6562
+          -179.07100000000003,
+          -60.0,
+          175.426,
+          59.9688
         ]
       ]
     },
     "temporal": {
       "interval": [
         [
-          "2004-04-18T08:38:44.036000Z",
-          "2004-04-18T08:44:43.039000Z"
+          "2004-01-14T00:19:12.032000Z",
+          "2009-10-27T17:15:54.009000Z"
         ]
       ]
     }

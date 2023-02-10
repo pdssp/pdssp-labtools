@@ -2,7 +2,7 @@
   "type": "Catalog",
   "id": "pdssp-lab-catalog",
   "stac_version": "1.0.0",
-  "description": "",
+  "description": "Root catalog containing one STAC collection, to be published via OGC WFS or Features API service.",
   "links": [
     {
       "rel": "root",
