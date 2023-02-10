@@ -184,7 +184,7 @@ def genstac(collection_index, output_stac_dir='catalogs', overwrite=False):
         'stac_extensions': ['ssys', 'processing', 'sci'],
         'title': 'OMEGA C-channel map-projected observations data cubes.',
         'description': 'These data cubes have been specifically selected and filtered for '
-                       'studies of the **surface mineralogy** between 1 and 2.5 microns.\n\n'
+                       'studies of the *surface mineralogy* between 1 and 2.5 microns.\n\n'
                        'They contain all the OMEGA observations acquired with the C channel '
                        'after filtering. Filtering processes have been implemented to remove '
                        'some instrumental artefacts and observational conditions. Each OMEGA '
@@ -283,12 +283,9 @@ def genstac(collection_index, output_stac_dir='catalogs', overwrite=False):
     sci_ext = ScientificExtension.ext(stac_collection, add_if_missing=True)
     publications = []
     for publication_dict in collection_dict['sci:publications']:
+        doi = ''
         if 'doi' in publication_dict.keys():
             doi = publication_dict['doi']
-            if doi == '':
-                doi = None
-        else:
-            doi = None
         publication = pystac.extensions.scientific.Publication(
             doi=doi,
             citation=publication_dict['citation']
