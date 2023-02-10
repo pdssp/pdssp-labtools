@@ -13,6 +13,8 @@ from contextlib import closing
 from urllib.request import urlretrieve
 import shutil
 
+from pystac.extensions.scientific import ScientificExtension
+
 INPUT_DATA_DIR = '/Users/nmanaud/workspace/pdssp/idoc_data'
 OUTPUT_STAC_DIR = './catalogs'
 
@@ -133,7 +135,7 @@ def omega_c_channel_proj_metadata(netcdf_path):
         phase_angle = None
         return {
             'id': Path(netcdf_path).stem,
-            'stac_extensions': ['ssys'],
+            'stac_extensions': ['ssys', 'processing'],
             'bbox': None,
             'datetime': datetime.fromisoformat(nc_dataset.variables['start_time'].getValue()),
             'title': nc_dataset.title,
@@ -144,7 +146,8 @@ def omega_c_channel_proj_metadata(netcdf_path):
                 'ssys:targets': ['Mars'],
                 'ssys:incidence_angle': incidence_angle,
                 'ssys:emission_angle': emission_angle,
-                'ssys:phase_angle': phase_angle
+                'ssys:phase_angle': phase_angle,
+                'processing:level': 'L3'
             },
             'collection': 'omega_c_channel_proj'
         }
@@ -176,12 +179,67 @@ def genstac(collection_index, output_stac_dir='catalogs', overwrite=False):
     }
 
     collection_dict = {
-        'id': collection_id,
-        'stac_extensions': ['ssys'],
-        'title': 'OMEGA observations acquired with the C channels, projected',
-        'description': 'These data cubes have been specifically selected and filtered for'
-                       ' studies of the surface mineralogy between 1 and 2.5 microns.',
-        'license': 'Licence TBD',
+        'id': 'omega_c_channel_prj',
+        'stac_extensions': ['ssys', 'processing', 'sci'],
+        'title': 'OMEGA C-channel map-projected observations data cubes.',
+        'description': (
+            'These data cubes have been specifically selected and filtered for '
+            'studies of the surface mineralogy between 1 and 2.5 microns.\n'
+            'They contain all the OMEGA observations acquired with the C channel '
+            'after filtering. Filtering processes have been implemented to remove '
+            'some instrumental artefacts and observational conditions. Each OMEGA '
+            'record is available as a netCDF4.nc file and an idl.sav\n',
+            'Both files contain the cubes of reflectance of the surface at a given '
+            'longitude, latitude and wavelength. The reflectance is defined by the '
+            '"reflectance factor" I(lambda)/(F cos(i)) where lambda is the solar incidence angle '
+            'with lambda from 0.97 to 2.55 microns (second dimension of the cube with 120 '
+            'wavelengths). The spectra are corrected for atmospheric and aerosol '
+            'contributions according to the method described in Vincendon et al. '
+            '(Icarus, 251, 2015). It therefore corresponds to albedo for a lambertian '
+            'surface. The first dimension of the cube refers to the length of scan. It '
+            'can be 32, 64, or 128 pixels. It gives the first spatial dimension. The '
+            'third dimension refers to the rank of the scan. It is the second spatial '
+            'dimension.'
+        ),
+        'providers': [
+            {
+                'name': "Institut d'Astrophysique Spatiale (IAS) - IDOC",
+                'description': "The Integrated Data and Operation Center (IDOC) is responsible for processing, "
+                               "archiving and distributing data from space science missions in which the institute "
+                               "is involved.",
+                'roles': ['producer', 'processor', 'host'],
+                'url': 'https://idoc.ias.universite-paris-saclay.fr',
+                "processing:level": "L3",
+            }
+        ],
+        'sci:publications': [
+            {
+                'doi': '',
+                'citation': 'Vincendon M., Audouard J., Altieri F., Ody A., Mars Express measurements of surface albedo  '
+                            'changes over 2004–2010, In Icarus, Volume 251, 2015, Pages 145-163, ISSN 0019-1035'
+            },
+            {
+                'doi': 'doi:10.1002/2014JE004649',
+                'citation': 'Audouard, J., F. Poulet, M. Vincendon, R. E. Milliken, D. Jouglet, J. Bibring, B. Gondet, '
+                            'and Y. Langevin (2014), Water in the Martian regolith from OMEGA/Mars Express, J. Geophys. '
+                            'Res. Planets,119, 1969–1989'
+            },
+            {
+                'doi': 'doi:10.1029/2006JE002841',
+                'citation': 'Langevin, Y., J.-P. Bibring, F. Montmessin, F. Forget, M. Vincendon, S. Douté, F. Poulet, '
+                            'and B. Gondet (2007), Observations of the south seasonal cap of Mars during recession in '
+                            '2004–2006 by the OMEGA visible/near-infrared imaging spectrometer on board Mars Express, '
+                            'J. Geophys. Res., 112, E08S12.'
+            },
+            {
+                'doi': '',
+                'citation': "Bibring et al (2004), OMEGA: Observatoire pour la Mineralogie, l'Eau, les Glaces et "
+                            "l'Activité, In: Mars Express: the scientific payload. ESA SP-1240, Noordwijk,"
+                            "Netherlands:ESA Publications Division, ISBN 92-9092-556-6, p. 37-49"
+            }
+        ],
+        'keywords': ['surface mineralogy'],
+        'license': 'CC-BY-4.0',
         'ssys:targets': ['Mars']
     }
 
@@ -193,15 +251,46 @@ def genstac(collection_index, output_stac_dir='catalogs', overwrite=False):
         extra_fields={'ssys:targets': catalog_dict['ssys:target']}
     )
 
+    # create collection STAC object
+
+    providers = []
+    for provider_dict in collection_dict['providers']:
+        provider = pystac.provider.Provider(
+            name=provider_dict['name'],
+            description=provider_dict['description'],
+            roles=provider_dict['roles'],
+            url=provider_dict['url'],
+            extra_fields={
+                'processing:level': provider_dict['processing:level']
+            }
+        )
+        providers.append(provider)
+
     stac_collection = pystac.Collection(
         id=collection_dict['id'],
         stac_extensions=collection_dict['stac_extensions'],
         title=collection_dict['title'],
         description=collection_dict['description'],
+        providers=providers,
+        keywords=collection_dict['keywords'],
         extent=pystac.Extent(pystac.SpatialExtent(bboxes=[[]]), pystac.TemporalExtent(intervals=[[]])),
         license=collection_dict['license'],
-        extra_fields={'ssys:targets': collection_dict['ssys:targets']}
+        extra_fields={
+            'ssys:targets': collection_dict['ssys:targets'],
+        }
     )
+
+    # add STAC Scientific Extension
+    sci_ext = ScientificExtension.ext(stac_collection, add_if_missing=True)
+    publications = []
+    for publication_dict in collection_dict['sci:publications']:
+        publication = pystac.extensions.scientific.Publication(
+            doi=publication_dict['doi'],
+            citation=publication_dict['citation']
+        )
+        publications.append(publication)
+    sci_ext.publications = publications
+
 
     # write STAC item
     for product in collection_index:

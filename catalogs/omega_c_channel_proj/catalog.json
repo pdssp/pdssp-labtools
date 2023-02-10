@@ -12,9 +12,9 @@
     },
     {
       "rel": "child",
-      "href": "./omega_c_channel_proj/collection.json",
+      "href": "./omega_c_channel_prj/collection.json",
       "type": "application/json",
-      "title": "OMEGA observations acquired with the C channels, projected"
+      "title": "OMEGA C-channel map-projected observations data cubes."
     }
   ],
   "stac_extensions": [
