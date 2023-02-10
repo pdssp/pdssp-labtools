@@ -165,6 +165,7 @@ def genstac(collection_index, output_stac_dir='catalogs', overwrite=False):
     if output_stac_dir.exists():
         if overwrite: # remove output STAC directory
             shutil.rmtree(output_stac_dir)
+            pass
         else:
             print(f'Output STAC directory already exists. Use `overwrite=True`.')
             return
@@ -182,25 +183,23 @@ def genstac(collection_index, output_stac_dir='catalogs', overwrite=False):
         'id': 'omega_c_channel_prj',
         'stac_extensions': ['ssys', 'processing', 'sci'],
         'title': 'OMEGA C-channel map-projected observations data cubes.',
-        'description': (
-            'These data cubes have been specifically selected and filtered for '
-            'studies of the surface mineralogy between 1 and 2.5 microns.\n'
-            'They contain all the OMEGA observations acquired with the C channel '
-            'after filtering. Filtering processes have been implemented to remove '
-            'some instrumental artefacts and observational conditions. Each OMEGA '
-            'record is available as a netCDF4.nc file and an idl.sav\n',
-            'Both files contain the cubes of reflectance of the surface at a given '
-            'longitude, latitude and wavelength. The reflectance is defined by the '
-            '"reflectance factor" I(lambda)/(F cos(i)) where lambda is the solar incidence angle '
-            'with lambda from 0.97 to 2.55 microns (second dimension of the cube with 120 '
-            'wavelengths). The spectra are corrected for atmospheric and aerosol '
-            'contributions according to the method described in Vincendon et al. '
-            '(Icarus, 251, 2015). It therefore corresponds to albedo for a lambertian '
-            'surface. The first dimension of the cube refers to the length of scan. It '
-            'can be 32, 64, or 128 pixels. It gives the first spatial dimension. The '
-            'third dimension refers to the rank of the scan. It is the second spatial '
-            'dimension.'
-        ),
+        'description': 'These data cubes have been specifically selected and filtered for '
+                       'studies of the surface mineralogy between 1 and 2.5 microns.'
+                       'They contain all the OMEGA observations acquired with the C channel '
+                       'after filtering. Filtering processes have been implemented to remove '
+                       'some instrumental artefacts and observational conditions. Each OMEGA '
+                       'record is available as a netCDF4.nc file and an idl.sav'
+                       'Both files contain the cubes of reflectance of the surface at a given '
+                       'longitude, latitude and wavelength. The reflectance is defined by the '
+                       '"reflectance factor" I(lambda)/(F cos(i)) where lambda is the solar incidence angle '
+                       'with lambda from 0.97 to 2.55 microns (second dimension of the cube with 120 '
+                       'wavelengths). The spectra are corrected for atmospheric and aerosol '
+                       'contributions according to the method described in Vincendon et al. '
+                       '(Icarus, 251, 2015). It therefore corresponds to albedo for a lambertian '
+                       'surface. The first dimension of the cube refers to the length of scan. It '
+                       'can be 32, 64, or 128 pixels. It gives the first spatial dimension. The '
+                       'third dimension refers to the rank of the scan. It is the second spatial '
+                       'dimension.',
         'providers': [
             {
                 'name': "Institut d'Astrophysique Spatiale (IAS) - IDOC",
