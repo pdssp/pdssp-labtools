@@ -283,8 +283,14 @@ def genstac(collection_index, output_stac_dir='catalogs', overwrite=False):
     sci_ext = ScientificExtension.ext(stac_collection, add_if_missing=True)
     publications = []
     for publication_dict in collection_dict['sci:publications']:
+        if 'doi' in publication_dict.keys():
+            doi = publication_dict['doi']
+            if doi == '':
+                doi = None
+        else:
+            doi = None
         publication = pystac.extensions.scientific.Publication(
-            doi=publication_dict['doi'],
+            doi=doi,
             citation=publication_dict['citation']
         )
         publications.append(publication)

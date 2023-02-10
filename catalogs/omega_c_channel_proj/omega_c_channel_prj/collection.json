@@ -12,19 +12,11 @@
     },
     {
       "rel": "cite-as",
-      "href": "https://doi.org/"
-    },
-    {
-      "rel": "cite-as",
       "href": "https://doi.org/doi%3A10.1002/2014JE004649"
     },
     {
       "rel": "cite-as",
       "href": "https://doi.org/doi%3A10.1029/2006JE002841"
-    },
-    {
-      "rel": "cite-as",
-      "href": "https://doi.org/"
     },
     {
       "rel": "item",
@@ -354,7 +346,7 @@
   ],
   "sci:publications": [
     {
-      "doi": "",
+      "doi": null,
       "citation": "Vincendon M., Audouard J., Altieri F., Ody A., Mars Express measurements of surface albedo  changes over 2004\u20132010, In Icarus, Volume 251, 2015, Pages 145-163, ISSN 0019-1035"
     },
     {
@@ -366,7 +358,7 @@
       "citation": "Langevin, Y., J.-P. Bibring, F. Montmessin, F. Forget, M. Vincendon, S. Dout\u00e9, F. Poulet, and B. Gondet (2007), Observations of the south seasonal cap of Mars during recession in 2004\u20132006 by the OMEGA visible/near-infrared imaging spectrometer on board Mars Express, J. Geophys. Res., 112, E08S12."
     },
     {
-      "doi": "",
+      "doi": null,
       "citation": "Bibring et al (2004), OMEGA: Observatoire pour la Mineralogie, l'Eau, les Glaces et l'Activit\u00e9, In: Mars Express: the scientific payload. ESA SP-1240, Noordwijk,Netherlands:ESA Publications Division, ISBN 92-9092-556-6, p. 37-49"
     }
   ],
