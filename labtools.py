@@ -184,11 +184,11 @@ def genstac(collection_index, output_stac_dir='catalogs', overwrite=False):
         'stac_extensions': ['ssys', 'processing', 'sci'],
         'title': 'OMEGA C-channel map-projected observations data cubes.',
         'description': 'These data cubes have been specifically selected and filtered for '
-                       'studies of the surface mineralogy between 1 and 2.5 microns.'
+                       'studies of the **surface mineralogy** between 1 and 2.5 microns.\n\n'
                        'They contain all the OMEGA observations acquired with the C channel '
                        'after filtering. Filtering processes have been implemented to remove '
                        'some instrumental artefacts and observational conditions. Each OMEGA '
-                       'record is available as a netCDF4.nc file and an idl.sav'
+                       'record is available as a netCDF4.nc file and an idl.sav.\n\n'
                        'Both files contain the cubes of reflectance of the surface at a given '
                        'longitude, latitude and wavelength. The reflectance is defined by the '
                        '"reflectance factor" I(lambda)/(F cos(i)) where lambda is the solar incidence angle '
