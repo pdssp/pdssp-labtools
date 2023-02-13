@@ -18,13 +18,15 @@ from pystac.extensions.scientific import ScientificExtension
 INPUT_DATA_DIR = '/Users/nmanaud/workspace/pdssp/idoc_data'
 OUTPUT_STAC_DIR = './catalogs'
 
-def load_colletion_index(collection_id):
+def load_collection_index(collection_id):
     """Returns the list of records (products) given a PSUP collection ID.
     """
     records =[]
     psup_url = ''
     if collection_id == 'omega_c_channel_proj':
         psup_url = 'http://psup.ias.u-psud.fr/ds/omega_c_channel/records'
+    elif collection_id == 'omega_global_maps':
+        psup_url = 'http://psup.ias.u-psud.fr/pgismarsraster/records'
     else:
         print(f'Invalid input collection ID: {collection_id}')
         return None
@@ -182,7 +184,7 @@ def genstac(collection_index, output_stac_dir='catalogs', overwrite=False):
     collection_dict = {
         'id': 'omega_c_channel_prj',
         'stac_extensions': ['ssys', 'processing', 'sci'],
-        'title': 'OMEGA C-channel map-projected observations data cubes.',
+        'title': 'OMEGA C-channel map-projected observations data cubes',
         'description': 'These data cubes have been specifically selected and filtered for '
                        'studies of the *surface mineralogy* between 1 and 2.5 microns.\n\n'
                        'They contain all the OMEGA observations acquired with the C channel '
@@ -363,7 +365,7 @@ def process_collection(collection_id, download=True, overwrite=False):
         print(f'ERROR: Input data collection directory not found: {collection_data_dir}')
 
     # load collection index from PSUP web service
-    collection_index = load_colletion_index(collection_id)
+    collection_index = load_collection_index(collection_id)
 
     # update collection index with product local path
     for i, product in enumerate(collection_index):
