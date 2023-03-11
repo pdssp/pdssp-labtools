@@ -1,0 +1,14 @@
+catalog:
+  id: 'ias'
+  title: 'IAS Planetary Surface Data STAC Catalog'
+  description: 'IAS Planetary Surface Data STAC Catalogs.'
+  providers:
+    - name: "Institut d'Astrophysique Spatiale (IAS) - IDOC"
+      description: |
+        The Integrated Data and Operation Center (IDOC) is responsible for processing, archiving
+        and distributing data from space science missions in which the institute is involved.
+      roles: ['producer', 'processor', 'host']
+      url: 'https://idoc.ias.universite-paris-saclay.fr'
+      processing:level: ''
+  catalogs:
+    - mars/catalog.yaml

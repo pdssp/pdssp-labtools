@@ -16,7 +16,7 @@ import shutil
 from pystac.extensions.scientific import ScientificExtension
 
 INPUT_DATA_DIR = '/Users/nmanaud/workspace/pdssp/idoc_data'
-OUTPUT_STAC_DIR = './catalogs'
+OUTPUT_STAC_DIR = 'stac'
 
 def load_collection_index(collection_id):
     """Returns the list of records (products) given a PSUP collection ID.
@@ -27,6 +27,10 @@ def load_collection_index(collection_id):
         psup_url = 'http://psup.ias.u-psud.fr/ds/omega_c_channel/records'
     elif collection_id == 'omega_global_maps':
         psup_url = 'http://psup.ias.u-psud.fr/pgismarsraster/records'
+    elif collection_id == 'features':
+        psup_url = 'http://psup.ias.u-psud.fr/pgismarsvector/records'
+    elif collection_id == 'omega_data_cubes':
+        psup_url = 'http://localhost:8282/ds/omega_data_cubes/records'
     else:
         print(f'Invalid input collection ID: {collection_id}')
         return None

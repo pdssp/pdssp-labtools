@@ -1,0 +1,30 @@
+collection:
+  id: 'features-catalogs'
+  extensions: [ 'ssys', 'processing', 'sci' ]
+  title: 'Mars surface features catalogs'
+  description: |
+    PSUP Catalogs are Hydrated mineral terrains, Central peaks hydrated phases between Isidis and Hellas,
+    Central peaks mineralogy south Valles Marineris, Valles Marineris low Calcium-Pyroxene, Seasonal South
+    polar cap limits, Scalloped depressions and Lobate impact craters. This dataset contains vector catalogs
+    and their associated metadatas. All catalogs are provided in GeoJSON file format.
+  ssys: ['Mars']
+  sci:publications:
+    - doi: ''
+      citation: >
+        Vincendon M., Audouard J., Altieri F., Ody A., Mars Express measurements of surface albedo
+        changes over 2004–2010, In Icarus, Volume 251, 2015, Pages 145-163, ISSN 0019-1035
+    - doi: 'doi:10.1002/2014JE004649'
+      citation: >
+        Audouard, J., F. Poulet, M. Vincendon, R. E. Milliken, D. Jouglet, J. Bibring, B. Gondet, and
+        Y. Langevin (2014), Water in the Martian regolith from OMEGA/Mars Express, J. Geophys.
+        Res. Planets,119, 1969–1989
+    - doi: 'doi:10.1029/2006JE002841'
+      citation': >
+        Langevin, Y., J.-P. Bibring, F. Montmessin, F. Forget, M. Vincendon, S. Douté, F. Poulet, and
+        B. Gondet (2007), Observations of the south seasonal cap of Mars during recession in 2004–2006 by the OMEGA
+        visible/near-infrared imaging spectrometer on board Mars Express, J. Geophys. Res., 112, E08S12.
+    - doi: ''
+      citation': >
+        Bibring et al (2004), OMEGA: Observatoire pour la Mineralogie, l'Eau, les Glaces et l'Activité, In:
+        Mars Express: the scientific payload. ESA SP-1240, Noordwijk, Netherlands:ESA Publications Division,
+        ISBN 92-9092-556-6, p. 37-49.

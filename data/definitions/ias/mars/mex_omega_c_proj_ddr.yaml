@@ -1,0 +1,39 @@
+collection:
+  id: 'mex_omega_c_proj_ddr'
+  extensions: [ 'ssys', 'processing', 'sci' ]
+  title: 'OMEGA C-channel map-projected observations data cubes'
+  description: |
+    These data cubes have been specifically selected and filtered for studies of the *surface mineralogy* between
+    1 and 2.5 microns.
+
+    They contain all the OMEGA observations acquired with the C channel after filtering. Filtering processes have been
+    implemented to remove some instrumental artefacts and observational conditions. Each OMEGA record is available as
+    a netCDF4.nc file and an idl.sav.
+
+    Both files contain the cubes of reflectance of the surface at a given longitude, latitude and wavelength. The
+    with lambda from 0.97 to 2.55 microns (second dimension of the cube with 120 wavelengths).
+    The spectra are corrected for atmospheric and aerosol contributions according to the method described in Vincendon
+    et al. (Icarus, 251, 2015). It therefore corresponds to albedo for a lambertian surface. The first dimension of
+    the cube refers to the length of scan. It can be 32, 64, or 128 pixels. It gives the first spatial dimension. The '
+    third dimension refers to the rank of the scan. It is the second spatial dimension.
+  ssys: ['Mars']
+  sci:publications:
+    - doi: ''
+      citation: >
+        Vincendon M., Audouard J., Altieri F., Ody A., Mars Express measurements of surface albedo
+        changes over 2004–2010, In Icarus, Volume 251, 2015, Pages 145-163, ISSN 0019-1035
+    - doi: 'doi:10.1002/2014JE004649'
+      citation: >
+        Audouard, J., F. Poulet, M. Vincendon, R. E. Milliken, D. Jouglet, J. Bibring, B. Gondet, and
+        Y. Langevin (2014), Water in the Martian regolith from OMEGA/Mars Express, J. Geophys.
+        Res. Planets,119, 1969–1989
+    - doi: 'doi:10.1029/2006JE002841'
+      citation': >
+        Langevin, Y., J.-P. Bibring, F. Montmessin, F. Forget, M. Vincendon, S. Douté, F. Poulet, and
+        B. Gondet (2007), Observations of the south seasonal cap of Mars during recession in 2004–2006 by the OMEGA
+        visible/near-infrared imaging spectrometer on board Mars Express, J. Geophys. Res., 112, E08S12.
+    - doi: ''
+      citation': >
+        Bibring et al (2004), OMEGA: Observatoire pour la Mineralogie, l'Eau, les Glaces et l'Activité, In:
+        Mars Express: the scientific payload. ESA SP-1240, Noordwijk, Netherlands:ESA Publications Division,
+        ISBN 92-9092-556-6, p. 37-49.
