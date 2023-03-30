@@ -1,0 +1,10 @@
+catalog:
+  id: 'moccas'
+  title: 'Mars Orbital Catalog of Aqueous Alteration Signatures'
+  extensions: [ 'ssys', 'processing', 'sci' ]
+  description: |
+    Global repository of secondary minerals formed through interaction with water on Mars. This work is based on the
+    analysis of orbital imaging spectroscopy data from the OMEGA/Mars Express and CRISM/MRO near-infrared instruments.
+    A database and a set of high-resolution global maps (200 m/pix) are produced which provide a large collection of
+    these "aqueous" secondary mineral deposits, most of which were not previously reported.
+  ssys_targets: ['Mars']

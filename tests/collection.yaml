@@ -3,7 +3,14 @@ collection:
   source:
     url: 'http://psup.ias.u-psud.fr/ds/omega_c_channel/records'
     schema: 'OMEGA_C_PROJ'
-  extensions: [ 'ssys', 'processing', 'sci' ]
+  links: []
+#  license: 'CC-BY-4.0'
+  extent:
+    spatial:
+      bbox: [[-180.0, -90.0, 180.0, 90.0]]
+    temporal:
+      interval: [[ "2004-01-10T13:50:36.474000Z", "2004-01-10T13:57:05.847000Z"]]
+  stac_extensions: [ 'ssys', 'processing', 'sci' ]
   title: 'OMEGA C-channel map-projected observations data cubes'
   description: |
     These data cubes have been specifically selected and filtered for studies of the *surface mineralogy* between
@@ -31,12 +38,12 @@ collection:
         Y. Langevin (2014), Water in the Martian regolith from OMEGA/Mars Express, J. Geophys.
         Res. Planets,119, 1969–1989
     - doi: 'doi:10.1029/2006JE002841'
-      citation: >
+      citation': >
         Langevin, Y., J.-P. Bibring, F. Montmessin, F. Forget, M. Vincendon, S. Douté, F. Poulet, and
         B. Gondet (2007), Observations of the south seasonal cap of Mars during recession in 2004–2006 by the OMEGA
         visible/near-infrared imaging spectrometer on board Mars Express, J. Geophys. Res., 112, E08S12.
     - doi: ''
-      citation: >
+      citation': >
         Bibring et al (2004), OMEGA: Observatoire pour la Mineralogie, l'Eau, les Glaces et l'Activité, In:
         Mars Express: the scientific payload. ESA SP-1240, Noordwijk, Netherlands:ESA Publications Division,
         ISBN 92-9092-556-6, p. 37-49.
