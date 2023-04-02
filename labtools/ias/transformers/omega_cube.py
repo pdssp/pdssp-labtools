@@ -1,4 +1,5 @@
 """Transformer module for OMEGA_CUBE metadata."""
+from typing import Any, Dict, List, Union, Optional
 
 from labtools.ias.schemas.omega_cube import (
     SCHEMA_NAME,
@@ -25,16 +26,13 @@ from labtools.schemas import factory as metadata_factory
 from labtools.utils import utc_to_iso
 from labtools.ias.netcdf import get_netcdf_footprint, get_netcdf_properties
 
-from geojson.geometry import Geometry
-
-from typing import Any, Dict, List, Union, Optional
 from pathlib import Path
-
+from datetime import datetime
 
 class OMEGA_CUBE_STAC_Transformer(AbstractTransformer):
 
     def get_item_id(self, metadata: OMEGA_Cube_Record, definition: ItemDefinition = None) -> str:
-        return Path(metadata.download_nc).stem
+        return f'OMEGA_L2_{Path(metadata.download_nc).stem}'  # OMEGA_L2_ORB0018_6
         # return f'L3_{int(metadata.orbit_number):04}_{int(metadata.cube_number)}'
 
     def get_collection_id(self, metadata: PSUP_Collection, definition: CollectionDefinition = None) -> str:
@@ -51,15 +49,15 @@ class OMEGA_CUBE_STAC_Transformer(AbstractTransformer):
         item_assets = {
             'nc_data_file': PDSSP_STAC_Asset(
                 href=metadata.download_nc,
-                title=self.get_item_id(metadata, definition=definition),
-                description='NetCDF4 data file',
+                title='NetCDF4 data file',  # self.get_item_id(metadata, definition=definition),
+                # description='NetCDF4 data file',
                 type='application/netcdf',
                 roles=['data']
             ),
             'sav_data_file': PDSSP_STAC_Asset(
                 href=metadata.download_sav,
-                title=self.get_item_id(metadata, definition=definition),
-                description='IDL SAV data file',
+                title='IDL SAV data file',  # self.get_item_id(metadata, definition=definition),
+                # description='IDL SAV data file',
                 type='application/octet-stream',
                 roles=['data']
             )
@@ -89,16 +87,16 @@ class OMEGA_CUBE_STAC_Transformer(AbstractTransformer):
         """Derives and returns footprint geometry from source data file.
         """
         geometry = None
-        if data_path:
-            netcdf_file = Path(data_path) / 'data' / Path(metadata.download_nc).name
-            if netcdf_file.exists():
-                try:
-                    geometry = get_netcdf_footprint(netcdf_file)
-                except Exception as e:
-                    print(e)
-                    print(f'Unable to extract footprint geometry from source NetCDF file: {netcdf_file}')
-            else:
-                print(f'Source data file not found: {netcdf_file!r}')
+        # if data_path:
+        #     netcdf_file = Path(data_path) / 'data' / Path(metadata.download_nc).name
+        #     if netcdf_file.exists():
+        #         try:
+        #             geometry = get_netcdf_footprint(netcdf_file)
+        #         except Exception as e:
+        #             print(e)
+        #             print(f'Unable to extract footprint geometry from source NetCDF file: {netcdf_file}')
+        #     else:
+        #         print(f'Source data file not found: {netcdf_file!r}')
         return geometry
 
     # def get_extent(self, metadata: BaseModel, definition: CollectionDefinition = None) -> Extent:
@@ -124,7 +122,7 @@ class OMEGA_CUBE_STAC_Transformer(AbstractTransformer):
     def get_properties(self, metadata: OMEGA_Cube_Record, definition: ItemDefinition = None, data_path: str = None) -> PDSSP_STAC_Properties:
 
         properties_dict = {
-            'datetime': None,
+            'datetime': datetime.now(),
             'created': None,
             'start_datetime': None,
             'end_datetime': None,
@@ -144,19 +142,19 @@ class OMEGA_CUBE_STAC_Transformer(AbstractTransformer):
             'pdssp_solar_longitude': metadata.solar_longitude
         }
 
-        # append data file metadata if available
-        if data_path:
-            netcdf_file = Path(data_path) / 'data' / Path(metadata.download_nc).name
-            if netcdf_file.exists():
-                try:
-                    netcdf_metadata_dict = get_netcdf_properties(netcdf_file, SCHEMA_NAME)
-                    print(netcdf_metadata_dict)
-                    properties_dict.update(netcdf_metadata_dict)
-                except Exception as e:
-                    print(e)
-                    print(f'Unable to extract and add properties from NetCDF file: {netcdf_file}')
-            else:
-                print(f'Source data file not found: {netcdf_file!r}')
+        # # append data file metadata if available
+        # if data_path:
+        #     netcdf_file = Path(data_path) / 'data' / Path(metadata.download_nc).name
+        #     if netcdf_file.exists():
+        #         try:
+        #             netcdf_metadata_dict = get_netcdf_properties(netcdf_file, SCHEMA_NAME)
+        #             print(netcdf_metadata_dict)
+        #             properties_dict.update(netcdf_metadata_dict)
+        #         except Exception as e:
+        #             print(e)
+        #             print(f'Unable to extract and add properties from NetCDF file: {netcdf_file}')
+        #     else:
+        #         print(f'Source data file not found: {netcdf_file!r}')
 
         return PDSSP_STAC_Properties(**properties_dict)
 

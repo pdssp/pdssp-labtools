@@ -89,7 +89,7 @@ def build_catalog(definitions, source_collections_files, stac_dir):
         # read product metadata from source collection file
         data_path = str(Path(source_collection_file).parent)
         products = psup.read_products_metadata(source_collection_file)
-        for product_metadata in products[:10]:
+        for product_metadata in products:
             # item_definition = None
             # item_definition = definitions.get_item_definition(collection_id, item_id=item_id)
             stac_item = transformer.create_stac_item(product_metadata, definition=collection_definition, collection_id=collection_id, data_path=data_path)
@@ -99,7 +99,7 @@ def build_catalog(definitions, source_collections_files, stac_dir):
         stac_collection.update_extent_from_items()
 
         # add collection to the output STAC catalog
-        stac_catalog = root_stac_catalog.get_child(collection_definition.path)  # TODO: add and use `parent_catalog` property to CollectionDefinition class instead of `path`
+        stac_catalog = root_stac_catalog.get_child(collection_definition.path)  # TODO: add and use a new `parent_catalog` property to CollectionDefinition class instead of `path`
         stac_catalog.add_child(stac_collection)
         print()
 

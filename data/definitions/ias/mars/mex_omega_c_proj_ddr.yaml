@@ -4,7 +4,7 @@ collection:
     url: 'http://psup.ias.u-psud.fr/ds/omega_c_channel/records'
     schema: 'OMEGA_C_PROJ'
   extensions: [ 'ssys', 'processing', 'sci' ]
-  title: 'OMEGA C-channel map-projected observations data cubes'
+  title: 'OMEGA C-channel Map-Projected Observations Data Cubes'
   description: |
     These data cubes have been specifically selected and filtered for studies of the *surface mineralogy* between
     1 and 2.5 microns.

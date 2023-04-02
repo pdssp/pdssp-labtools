@@ -50,9 +50,9 @@ class VECTOR_FEATURES_STAC_Transformer(AbstractTransformer):
         item_assets = {
             'json_data_file': PDSSP_STAC_Asset(
                 href=metadata.download,
-                title=self.get_item_id(metadata, definition=definition),
-                description='JSON data file',
-                type='application/json',
+                title='GeoJSON data file', # self.get_item_id(metadata, definition=definition),
+                # description='JSON data file',
+                type='application/geo+json',
                 roles=['data']
             )
         }
@@ -107,7 +107,7 @@ class VECTOR_FEATURES_STAC_Transformer(AbstractTransformer):
         properties_dict = {
             'datetime': datetime.now(),
             'created': None,
-            'title': f'Locations of "{metadata.vector_description[1:-1].lower()}',
+            'title': f'Locations of "{metadata.vector_description[1:-1].title()}"',
             # 'start_datetime': utc_to_iso(metadata.start_date, timespec='milliseconds'),
             # 'end_datetime': utc_to_iso(metadata.end_date, timespec='milliseconds'),
             # 'platform': 'MEX',

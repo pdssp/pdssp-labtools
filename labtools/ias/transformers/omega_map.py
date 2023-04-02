@@ -50,15 +50,15 @@ class OMEGA_MAP_STAC_Transformer(AbstractTransformer):
         item_assets = {
             'fits_data_file': PDSSP_STAC_Asset(
                 href=metadata.download,
-                title=self.get_item_id(metadata, definition=definition),
-                description='FITS data file',
+                title='FITS data file',  #self.get_item_id(metadata, definition=definition),
+                # description='FITS data file',
                 type='application/fits',
                 roles=['data']
             ),
             'fits_preview_file': PDSSP_STAC_Asset(
                 href=metadata.preview,
-                title=self.get_item_id(metadata, definition=definition),
-                description='Preview image file',
+                title='Preview PNG image file',  # self.get_item_id(metadata, definition=definition),
+                # description='Preview PNG image file',
                 type='image/png',
                 roles=['thumbnail']
             )

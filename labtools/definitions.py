@@ -144,7 +144,10 @@ class Definitions:
 
         # set default 'providers'
         if 'providers' not in yaml_catalog_dict.keys():
-            yaml_catalog_dict.update({'providers': []})
+            if parent_catalog_definition:
+                yaml_catalog_dict.update({'providers': parent_catalog_definition.providers})
+            else:
+                yaml_catalog_dict.update({'providers': []})
 
         # set default 'ssys_targets'
         if 'ssys_targets' not in yaml_catalog_dict.keys():
@@ -199,9 +202,12 @@ class Definitions:
         if 'license' not in yaml_collection_dict.keys():
             yaml_collection_dict.update({'license': 'Undefined'})
 
-        # set default 'providers' TODO: inherit definition from parent catalog if defined
+        # set default 'providers'
         if 'providers' not in yaml_collection_dict.keys():
-            yaml_collection_dict.update({'providers': []})
+            if parent_catalog_definition:
+                yaml_collection_dict.update({'providers': parent_catalog_definition.providers})
+            else:
+                yaml_collection_dict.update({'providers': []})
 
         # set default 'ssys_targets'
         if 'ssys_targets' not in yaml_collection_dict.keys():

@@ -3,9 +3,10 @@ catalog:
   title: 'IAS Planetary Surface Data STAC Catalog'
   extensions: [ 'ssys', 'processing', 'sci' ]
   description: |
-    This is a test STAC catalog created for planetary surface datasets produced and/or provided by the Institut
-    d'Astrophysique Spatiale (IAS). It currently holds one Mars catalog, containing collections currently provided
-    through [PSUP](http://psup.ias.u-psud.fr/sitools/client-user/index.html?project=PLISonMars) (Planetary SUrface Portal).
+    This is a test STAC catalog created, using [PDSSP Labtools](https://github.com/pdssp/pdssp-labtools), for planetary
+    surface datasets produced and/or provided by the Institut d'Astrophysique Spatiale (IAS). It currently holds one
+    Mars catalog, containing collections currently provided through [PSUP](http://psup.ias.u-psud.fr/sitools/client-user/index.html?project=PLISonMars)
+    (Planetary SUrface Portal).
 
     ![Mars](https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Mars_%28white_background%29.jpg/120px-Mars_%28white_background%29.jpg)
 

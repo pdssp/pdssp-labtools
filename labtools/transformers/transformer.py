@@ -360,12 +360,26 @@ class AbstractTransformer(ABC):
         stac_collection_metadata = metadata_factory.create_metadata_object(stac_collection_dict, STAC_SCHEMA_NAME, 'collection')
         # print('>', stac_collection_dict['id'], stac_collection_dict['keywords'], stac_collection_metadata.keywords)
 
+        # print('>')
+        # print(type(stac_collection_metadata.providers))
+        # print(stac_collection_metadata.providers)
+        providers = []
+        for provider in stac_collection_metadata.providers:
+            stac_provider = pystac.Provider(
+                name=provider.name,
+                description=provider.description,
+                roles=provider.roles,
+                url=provider.url
+            )
+            providers.append(stac_provider)
+
         # create STAC collection object from STAC metadata object
         stac_collection = pystac.Collection(
             id=stac_collection_metadata.id,
             stac_extensions=stac_collection_metadata.stac_extensions,
             title=stac_collection_metadata.title,
             description=stac_collection_metadata.description,
+            providers=providers,
             keywords=stac_collection_metadata.keywords,
             extent=pystac.Extent(pystac.SpatialExtent(bboxes=[[]]), pystac.TemporalExtent(intervals=[[]])),
             license=stac_collection_metadata.license,

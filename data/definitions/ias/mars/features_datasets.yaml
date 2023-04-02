@@ -4,7 +4,7 @@ collection:
     url: 'http://psup.ias.u-psud.fr/pgismarsvector/records'
     schema: 'VECTOR_FEATURES'
   extensions: [ 'ssys', 'processing', 'sci' ]
-  title: 'Mars Surface Features Datasets'
+  title: 'Mars Surface Features Location Datasets'
   description: |
     This collections holds locations data for hydrated mineral terrains, Central peaks hydrated phases between Isidis
     and Hellas, Central peaks mineralogy south Valles Marineris, Valles Marineris low Calcium-Pyroxene, Seasonal South

@@ -32,7 +32,7 @@ from pathlib import Path
 class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
 
     def get_item_id(self, metadata: OMEGA_C_Proj_Record, definition: ItemDefinition = None) -> str:
-        return Path(metadata.download_nc).stem
+        return f'OMEGA_L3_{Path(metadata.download_nc).stem}_CPROJ'  # OMEGA_L3_ORB0018_6_CPROJ
 
     def get_collection_id(self, metadata: PSUP_Collection, definition: CollectionDefinition = None) -> str:
         return metadata.id
@@ -47,15 +47,15 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
         item_assets = {
             'nc_data_file': PDSSP_STAC_Asset(
                 href=metadata.download_nc,
-                title=self.get_item_id(metadata, definition=definition),
-                description='NetCDF4 data file',
+                title='NetCDF4 data file',  # self.get_item_id(metadata, definition=definition),
+                # description='NetCDF4 data file',
                 type='application/netcdf',
                 roles=['data']
             ),
             'sav_data_file': PDSSP_STAC_Asset(
                 href=metadata.download_sav,
-                title=self.get_item_id(metadata, definition=definition),
-                description='IDL SAV data file',
+                title='IDL SAV data file', # self.get_item_id(metadata, definition=definition),
+                # description='IDL SAV data file',
                 type='application/octet-stream',
                 roles=['data']
             )
@@ -121,7 +121,7 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
 
         properties_dict = {
             'datetime': utc_to_iso(metadata.start_date,  timespec='milliseconds'),
-            'title': f'OMEGA {self.get_item_id(metadata, definition=definition)} Observation Map-Projected Data Cube',
+            # 'title': f'OMEGA Observation Map-Projected Data Cube #{self.get_item_id(metadata, definition=definition)}',
             'created': None,
             'start_datetime': utc_to_iso(metadata.start_date, timespec='milliseconds'),
             'end_datetime': utc_to_iso(metadata.end_date, timespec='milliseconds'),

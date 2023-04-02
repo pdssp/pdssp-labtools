@@ -3,8 +3,15 @@ catalog:
   title: 'Mars Orbital Catalog of Aqueous Alteration Signatures'
   extensions: [ 'ssys', 'processing', 'sci' ]
   description: |
-    Global repository of secondary minerals formed through interaction with water on Mars. This work is based on the
-    analysis of orbital imaging spectroscopy data from the OMEGA/Mars Express and CRISM/MRO near-infrared instruments.
-    A database and a set of high-resolution global maps (200 m/pix) are produced which provide a large collection of
-    these "aqueous" secondary mineral deposits, most of which were not previously reported.
+    This catalog will include vector and raster datasets that are part of the "Mars Orbital Catalog of
+    Aqueous Alteration Signatures" (MOCAAS), global repository of secondary minerals formed through interaction with
+    water on Mars. This work is based on the analysis of orbital imaging spectroscopy data from the OMEGA/Mars Express
+    and CRISM/MRO near-infrared instruments. A database and a set of high-resolution global maps (200 m/pix) are
+    produced which provide a large collection of these "aqueous" secondary mineral deposits, most of which were not
+    previously reported.
   ssys_targets: ['Mars']
+  sci_publications:
+    - doi: 'doi:10.1016/j.icarus.2022.115164'
+      citation: >
+        John Carter, Lucie Riu, François Poulet, Jean-Pierre Bibring, Yves Langevin, Brigitte Gondet, A Mars orbital
+        catalog of aqueous alteration signatures (MOCAAS), Icarus, Volume 389, 2023, 115164, ISSN 0019-1035

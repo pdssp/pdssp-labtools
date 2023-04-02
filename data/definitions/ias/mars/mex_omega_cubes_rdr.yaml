@@ -4,7 +4,7 @@ collection:
     url: 'http://psup.ias.u-psud.fr/ds/omega_data_cubes/records'
     schema: 'OMEGA_CUBE'
   extensions: [ 'ssys', 'processing', 'sci' ]
-  title: 'OMEGA calibrated data cubes'
+  title: 'OMEGA Calibrated Observation Data Cubes'
   description: |
     This collection contains all the OMEGA observations acquired with the C, L and VIS channels until April 2016, 11,
     after filtering. Filtering processes have been implemented to remove some instrumental artefacts and observational
@@ -23,6 +23,7 @@ collection:
   ssys_targets: ['Mars']
   processing_level: 'L2'
   license: 'CC-BY-4.0'
+  keywords: ['calibrated']
   sci_publications:
     - doi: ''
       citation: >
