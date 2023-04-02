@@ -20,6 +20,9 @@ collection:
     the cube refers to the length of scan. It can be 32, 64, or 128 pixels. It gives the first spatial dimension. The '
     third dimension refers to the rank of the scan. It is the second spatial dimension.
   ssys_targets: ['Mars']
+  processing_level: 'L3'
+  license: 'CC-BY-4.0'
+  keywords: ['map-projected']
   sci_publications:
     - doi: ''
       citation: >

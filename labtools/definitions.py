@@ -1,6 +1,6 @@
 """Catalog definition module."""
 
-from typing import Optional
+from typing import Any, Dict, List, Union, Optional
 from pydantic import BaseModel, Field
 import yaml
 from pathlib import Path
@@ -8,7 +8,12 @@ import copy
 
 from stac_pydantic import Collection, Catalog, Item
 from stac_pydantic.shared import Asset, Provider
+from stac_pydantic.item import ItemProperties
+from stac_pydantic.links import Link
+
 import labtools.schemas.pdssp_stac as pdssp_stac
+
+from datetime import datetime
 
 # TODO: rename most 'collection' to 'collection_definition', and 'catalog' to 'catalog_definition' variable/method names.
 
@@ -18,6 +23,19 @@ STAC_EXTENSIONS_URLS = {
     'processing': 'https://stac-extensions.github.io/processing/v1.1.0/schema.json'
 }
 
+def get_stac_extension_prefix(stac_extension_url):
+    for stac_extension_prefix in STAC_EXTENSIONS_URLS.keys():
+        if stac_extension_url == STAC_EXTENSIONS_URLS[stac_extension_prefix]:
+            return stac_extension_prefix
+    raise Exception(f'Undefined {stac_extension_url!r} STAC extension url. Allowed extensions: {list(STAC_EXTENSIONS_URLS.keys())}.')
+
+def get_stac_extension_url(stac_extension_prefix):
+    if stac_extension_prefix in STAC_EXTENSIONS_URLS.keys():
+        return STAC_EXTENSIONS_URLS[stac_extension_prefix]
+    else:
+        raise Exception(f'Undefined {stac_extension_prefix!r} STAC extension prefix. Allowed extensions: {list(STAC_EXTENSIONS_URLS.keys())}.')
+
+
 class SourceDefinition(BaseModel):
     url: str
     metadata_schema: Optional[str] = Field(alias='schema')
@@ -25,17 +43,28 @@ class SourceDefinition(BaseModel):
 
 class ItemDefinition(Item):
     id: str
-    data_url: str
-
+    data_url: Optional[str]
+    extensions: Optional[list[str]]
+    sci_publications: Optional[list[pdssp_stac.PDSSP_STAC_SciPublication]]
+    properties: Optional[ItemProperties]
+    assets: Optional[Dict[str, Asset]] = {}
+    links: Optional[list[Link]] = []
 
 class CollectionDefinition(Collection):
     id: str
     source: SourceDefinition
     title: str
     description: str
-    # stac_extensions: list[str]
+    extensions: list[str]
+    processing_level: str
     ssys_targets: list[str]  #= Field(None, alias='ssys:targets')
-    sci_publications: list[pdssp_stac.PDSSP_STAC_Scientific_Publication]
+    sci_publications: list[pdssp_stac.PDSSP_STAC_SciPublication]
+
+    items: Optional[list[ItemDefinition]]
+    """Items definitions"""
+
+    links: Optional[list[Link]]
+
     path: str
     """Parent catalog path relative to root catalog definition path."""
 
@@ -47,7 +76,7 @@ class CatalogDefinition(Catalog):
     id: str
     title: str
     description: str
-    # stac_extensions: list[str]
+    extensions: list[str]
     providers: Optional[list[Provider]]  # used as default for child catalogs and/or collections
     ssys_targets: list[str]  #= Field(None, alias='ssys:targets')
 
@@ -102,19 +131,12 @@ class Definitions:
         """Returns a CatalogDefinition object for a given input YAML catalog dictionary.
         """
 
-        # set 'stac_extensions'
-        stac_extensions_urls = []
-        if 'stac_extensions' not in yaml_catalog_dict.keys():
-            stac_extensions = ['ssys']
-        else:
-            stac_extensions = yaml_catalog_dict['stac_extensions']
-
-        for stac_extension in stac_extensions:
-            if stac_extension in STAC_EXTENSIONS_URLS.keys():
-                stac_extensions_urls.append(STAC_EXTENSIONS_URLS[stac_extension])
-            else:
-                raise Exception(f'Undefined {stac_extension!r} STAC extension schema. Allowed extensions: {list(STAC_EXTENSIONS_URLS.keys())}.')
-        yaml_catalog_dict.update({'stac_extensions': stac_extensions_urls})
+        # set 'stac_extensions' from extension prefix in `extensions` YAML dict
+        stac_extensions_prefixes = yaml_catalog_dict['extensions']
+        stac_extensions = []
+        for stac_extension_prefix in stac_extensions_prefixes:
+            stac_extensions.append(get_stac_extension_url(stac_extension_prefix))
+        yaml_catalog_dict.update({'stac_extensions': stac_extensions})
 
         # set default 'links'
         if 'links' not in yaml_catalog_dict.keys():
@@ -154,25 +176,18 @@ class Definitions:
     def create_collection_definition(self, yaml_collection_dict, parent_catalog_definition: CatalogDefinition = None) -> CollectionDefinition:
         """Returns a CollectionDefinition object for input YAML collection dictionary."""
 
-        # set 'stac_extensions'
-        stac_extensions_urls = []
-        if 'stac_extensions' not in yaml_collection_dict.keys():
-            stac_extensions = ['ssys']
-        else:
-            stac_extensions = yaml_collection_dict['stac_extensions']
-
-        for stac_extension in stac_extensions:
-            if stac_extension in STAC_EXTENSIONS_URLS.keys():
-                stac_extensions_urls.append(STAC_EXTENSIONS_URLS[stac_extension])
-            else:
-                raise Exception(f'Undefined {stac_extension!r} STAC extension schema. Allowed extensions: {list(STAC_EXTENSIONS_URLS.keys())}.')
-        yaml_collection_dict.update({'stac_extensions': stac_extensions_urls})
+        # set 'stac_extensions' from extension prefix in `extensions` YAML dict
+        stac_extensions_prefixes = yaml_collection_dict['extensions']
+        stac_extensions = []
+        for stac_extension_prefix in stac_extensions_prefixes:
+            stac_extensions.append(get_stac_extension_url(stac_extension_prefix))
+        yaml_collection_dict.update({'stac_extensions': stac_extensions})
 
         # set default 'links'
         if 'links' not in yaml_collection_dict.keys():
             yaml_collection_dict.update({'links': []})
 
-        # set default 'links'
+        # set default 'keywords'
         if 'keywords' not in yaml_collection_dict.keys():
             yaml_collection_dict.update({'keywords': []})
 
@@ -192,16 +207,24 @@ class Definitions:
         if 'ssys_targets' not in yaml_collection_dict.keys():
             yaml_collection_dict.update({'ssys_targets': []})
 
+        # set default 'processing_level'
+        if 'processing_level' not in yaml_collection_dict.keys():
+            yaml_collection_dict.update({'processing_level': ''})
+
         # set default 'sci_publications'
         if 'sci_publications' not in yaml_collection_dict.keys():
             yaml_collection_dict.update({'sci_publications': []})
+
+        # set default 'sci_publications'
+        if 'items' not in yaml_collection_dict.keys():
+            yaml_collection_dict.update({'items': []})
 
         # set collection path relative to root catalog
         relpath = '.'
         if parent_catalog_definition:
             relpath = parent_catalog_definition.path
         yaml_collection_dict.update({'path': relpath})
-
+        # print(yaml_collection_dict)
         return CollectionDefinition(**yaml_collection_dict)
 
     def add_catalog(self, yaml_catalog_dict, parent_catalog_definition: CatalogDefinition = None):
@@ -305,6 +328,32 @@ class Definitions:
         if self.collections:
             last_added_collection_id = self.collections[-1].id
         return last_added_collection_id
+
+    def get_item_definition(self, collection_id, item_id=None) -> Optional[ItemDefinition]:
+        """Returns a generic item definition inheriting from the definition of given collection ID.
+        """
+        # get parent collection definition
+        collection_definition = self.get_collection(collection_id)
+
+        if item_id:
+            for item_definition in collection_definition.items:
+                if item_definition.id == item_id:
+                    return item_definition
+            print(f'Definition of item {item_id!r} in {collection_id!r} not found.')
+            return None
+
+        # create item definition object
+        item_definition = ItemDefinition(
+            id='*',
+            stac_version=collection_definition.stac_version,
+            properties={'datetime': datetime.now()},
+            assets={},
+            links=collection_definition.links,
+            extensions=collection_definition.extensions,
+            stac_extensions=collection_definition.stac_extensions,
+            data_url=''
+        )
+        return item_definition
 
     def get_collections_ids(self, id='', path='') -> list[str]:
         collections_ids = []

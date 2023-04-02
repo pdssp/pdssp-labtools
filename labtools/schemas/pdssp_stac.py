@@ -8,7 +8,7 @@ https://github.com/stac-utils/stac-pydantic
 
 """
 from typing import Any, Dict, List, Union, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, Extra
 
 from labtools.schemas import factory
 
@@ -83,8 +83,7 @@ class PDSSP_STAC_Collection(Collection):
     # summaries: Optional[dict]
     # links: Optional[list[PDSSP_STAC_Link]]  # WARNING: NOT optional following STAC standard -> created automatically by PySTAC.
     # assets: Optional[dict]  ## Map<string, PDSSP_STAC_Asset>: dictionary of asset objects that can be downloaded, each with a unique key
-    # extra_fields: Optional[dict]
-    pass
+    extra_fields: Optional[dict]
 
 
 class PDSSP_STAC_Asset(Asset):
@@ -96,7 +95,7 @@ class PDSSP_STAC_Asset(Asset):
     pass
 
 
-class PDSSP_STAC_Properties(ItemProperties): # STAC Common Metadata
+class PDSSP_STAC_Properties(ItemProperties, extra=Extra.allow): # STAC Common Metadata
     # title: Optional[str] #
     # description: Optional[str]
     # datetime: str  # ISO 8601 format
@@ -113,6 +112,8 @@ class PDSSP_STAC_Properties(ItemProperties): # STAC Common Metadata
     # ssys_targets: Optional[list[str]] = Field(None, alias='ssys:targets')
     # ssys_solar_longitude: Optional[float]
     # ssys_instrument_host: Optional[str]
+    start_datetime: Optional[str] = Field(None, alias="start_datetime")
+    end_datetime: Optional[str] = Field(None, alias="end_datetime")
     pdssp_solar_longitude: Optional[float] = Field(None, alias="pdssp:solar_longitude")
     pdssp_solar_distance: Optional[float] = Field(None, alias="pdssp:solar_distance")
     pdssp_incidence_angle: Optional[float] = Field(None, alias="pdssp:incidence_angle")
@@ -127,12 +128,11 @@ class PDSSP_STAC_Item(Item):
     # id: str
     # geometry: object  # GeoJSON Geometry
     # bbox: Union[list[float], None]
-    # properties: dict  # PDSSP_STAC_Properties
+    properties: PDSSP_STAC_Properties
     # links: Optional[list[PDSSP_STAC_Link]]  # WARNING: NOT optional following STAC standard -> created automatically by PySTAC.
     # assets: dict  ## Map<string, PDSSP_STAC_Asset>: dictionary of asset objects that can be downloaded, each with a unique key.
     # collection: Optional[str]
-    # extra_fields: Optional[dict]
-    pass
+    extra_fields: Optional[dict]
 
 
 ### EXTENSIONS
@@ -151,8 +151,8 @@ class PDSSP_STAC_SciPublication(BaseModel):
 
 
 class PDSSP_STAC_SciProperties(BaseModel):
-    sci_doi: Optional[str] = Field(..., alias="sci:doi")
-    sci_citation: Optional[str] = Field(..., alias="sci:citation")
+    sci_doi: Optional[str] = Field(alias="sci:doi")
+    sci_citation: Optional[str] = Field(alias="sci:citation")
     sci_publications: Optional[list[PDSSP_STAC_SciPublication]] = Field(..., alias="sci:publications")
 
 

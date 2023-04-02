@@ -22,7 +22,7 @@ class OMEGA_C_Proj_Record(BaseModel):
     data_quality_id: str
 
     def get_download_url(self):
-        return self.download_sav
+        return self.download_nc
 
 def register() -> None:
     factory.register(SCHEMA_NAME, OMEGA_C_Proj_Record, PSUP_Collection)

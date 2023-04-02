@@ -22,7 +22,7 @@ def download_collection(collection_id, psup_url, metadata_schema, output_dir='so
 
     if source_collection_file.exists() and not overwrite:
         print(f'Output source collection file already exists: {source_collection_file!r}.')
-        return
+        return source_collection_file
 
     # check connection and get the total number of products
     with closing(requests.get(psup_url, params=dict(limit=0))) as r:
@@ -88,7 +88,6 @@ def read_products_metadata(source_collection_file):
     # retrieve metadata schema name
     collection_metadata = read_collection_metadata(source_collection_file)
     schema_name = collection_metadata.schema_name
-    print('>>', schema_name)
 
     # read source collection file
     with open(source_collection_file, 'r') as f:
@@ -114,10 +113,14 @@ def read_products_metadata(source_collection_file):
 def download_data_files(source_collection_file, overwrite=False):
     products = read_products_metadata(source_collection_file)
 
-    MAX_N_PRODUCTS = 10
-    if products:
-        products = products[:MAX_N_PRODUCTS]
-    else:
+    # MAX_N_PRODUCTS = 10
+    # if products:
+    #     products = products[:MAX_N_PRODUCTS]
+    # else:
+    #     print(f'No products found in {source_collection_file!r}.')
+    #     return
+
+    if not products:
         print(f'No products found in {source_collection_file!r}.')
         return
 
@@ -142,7 +145,8 @@ def download_data_files(source_collection_file, overwrite=False):
         product_path = data_dir / product_fname
         if not product_path.exists() or overwrite:
             try:
-                # urlretrieve(url, product_path)
+                # print(url, product_path)
+                urlretrieve(url, product_path)
                 print('DONE')
             except Exception as e:
                 product_path = ''

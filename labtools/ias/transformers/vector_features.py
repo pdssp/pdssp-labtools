@@ -1,8 +1,9 @@
-"""Transformer module for PSUP_OMEGA_C_PROJ metadata."""
+"""Transformer module for VECTOR_FEATURES metadata."""
+from typing import Any, Dict, List, Union, Optional
 
-from labtools.ias.schemas.omega_c_proj import (
+from labtools.ias.schemas.vector_features import (
     SCHEMA_NAME,
-    OMEGA_C_Proj_Record,
+    Vector_Features_Record,
     PSUP_Collection
 )
 from labtools.schemas.pdssp_stac import (
@@ -22,17 +23,19 @@ from labtools.definitions import ItemDefinition, CollectionDefinition
 from labtools.transformers.transformer import AbstractTransformer, InvalidModelObjectTypeError
 from labtools.transformers import factory as transformer_factory
 from labtools.schemas import factory as metadata_factory
-from labtools.utils import utc_to_iso
+from labtools.utils import utc_to_iso, bbox, bbox_polygon
 from labtools.ias.netcdf import get_netcdf_footprint, get_netcdf_properties
 
-from typing import Any, Dict, List, Union, Optional
+from datetime import datetime
 from pathlib import Path
+from geojson import Polygon
+import json
 
 
-class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
+class VECTOR_FEATURES_STAC_Transformer(AbstractTransformer):
 
-    def get_item_id(self, metadata: OMEGA_C_Proj_Record, definition: ItemDefinition = None) -> str:
-        return Path(metadata.download_nc).stem
+    def get_item_id(self, metadata: Vector_Features_Record, definition: ItemDefinition = None) -> str:
+        return Path(metadata.vector_name).stem
 
     def get_collection_id(self, metadata: PSUP_Collection, definition: CollectionDefinition = None) -> str:
         return metadata.id
@@ -43,26 +46,19 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
     # def get_item_links(self, metadata: BaseModel, definition: ItemDefinition = None) -> list[Link]:
     #     pass
 
-    def get_item_assets(self, metadata: OMEGA_C_Proj_Record, definition: ItemDefinition = None) -> Dict[str, PDSSP_STAC_Asset]:
+    def get_item_assets(self, metadata: Vector_Features_Record, definition: ItemDefinition = None) -> Dict[str, PDSSP_STAC_Asset]:
         item_assets = {
-            'nc_data_file': PDSSP_STAC_Asset(
-                href=metadata.download_nc,
+            'json_data_file': PDSSP_STAC_Asset(
+                href=metadata.download,
                 title=self.get_item_id(metadata, definition=definition),
-                description='NetCDF4 data file',
-                type='application/netcdf',
-                roles=['data']
-            ),
-            'sav_data_file': PDSSP_STAC_Asset(
-                href=metadata.download_sav,
-                title=self.get_item_id(metadata, definition=definition),
-                description='IDL SAV data file',
-                type='application/octet-stream',
+                description='JSON data file',
+                type='application/json',
                 roles=['data']
             )
         }
         return item_assets
 
-    # def get_collection_links(self, metadata: OMEGA_C_Proj_Record, definition: CollectionDefinition = None) -> list[PDSSP_STAC_Link]:
+    # def get_collection_links(self, metadata: Vector_Features_Record, definition: CollectionDefinition = None) -> list[PDSSP_STAC_Link]:
     #     return []
     #
 
@@ -81,32 +77,21 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
     # def get_keywords(self, metadata: BaseModel, definition: CollectionDefinition = None) -> list[str]:
     #     pass
 
-    def get_geometry(self, metadata: OMEGA_C_Proj_Record, definition: ItemDefinition = None, data_path: str = None) -> Optional[Dict[str, Any]]:
+    def get_geometry(self, metadata: Vector_Features_Record, definition: ItemDefinition = None, data_path: str = None) -> Optional[Dict[str, Any]]:
         """Derives and returns footprint geometry from source data file.
         """
-        geometry = None
-        if data_path:
-            netcdf_file = Path(data_path) / 'data' / Path(metadata.download_nc).name
-            if netcdf_file.exists():
-                try:
-                    geometry = get_netcdf_footprint(netcdf_file)
-                except Exception as e:
-                    print(e)
-                    print(f'Unable to extract footprint geometry from source NetCDF file: {netcdf_file}')
-            else:
-                print(f'Source data file not found: {netcdf_file!r}')
+        vector_footprint = metadata.vector_footprint  # '((-180,-90),(-180,90),(180,90),(180,-90))'
+        pts_tuple = eval(vector_footprint[1:-1])
+        coords = [pts_tuple + (pts_tuple[0],)]
+        geometry = json.loads(str(Polygon(coords)))
         return geometry
 
     # def get_extent(self, metadata: BaseModel, definition: CollectionDefinition = None) -> Extent:
     #     pass
 
-    def get_bbox(self, metadata: OMEGA_C_Proj_Record, definition: ItemDefinition = None) -> list[float]:
-        return [
-            (float(metadata.westernmost_longitude) + 180.0) % 360.0 - 180.0,
-            float(metadata.minimum_latitude),
-            (float(metadata.easternmost_longitude) + 180.0) % 360.0 - 180.0,
-            float(metadata.maximum_latitude)
-        ]
+    def get_bbox(self, metadata: Vector_Features_Record, definition: ItemDefinition = None) -> list[float]:
+        geometry = self.get_geometry(metadata, definition=definition)
+        return bbox(Polygon(geometry['coordinates']))
 
     # def get_providers(self, metadata: BaseModel, definition: CollectionDefinition = None) -> list[Provider]:
     #     pass
@@ -117,41 +102,37 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
     # def get_summaries(self, metadata: BaseModel, definition: CollectionDefinition = None) -> Optional[Dict[str, Union[Range, List[Any], Dict[str, Any]]]]:
     #     pass
 
-    def get_properties(self, metadata: OMEGA_C_Proj_Record, definition: ItemDefinition = None, data_path: str = None) -> PDSSP_STAC_Properties:
+    def get_properties(self, metadata: Vector_Features_Record, definition: ItemDefinition = None, data_path: str = None) -> PDSSP_STAC_Properties:
 
         properties_dict = {
-            'datetime': utc_to_iso(metadata.start_date,  timespec='milliseconds'),
-            'title': f'OMEGA {self.get_item_id(metadata, definition=definition)} Observation Map-Projected Data Cube',
+            'datetime': datetime.now(),
             'created': None,
-            'start_datetime': utc_to_iso(metadata.start_date, timespec='milliseconds'),
-            'end_datetime': utc_to_iso(metadata.end_date, timespec='milliseconds'),
-            'platform': 'MEX',
-            'instruments': ['OMEGA'],
+            'title': f'Locations of "{metadata.vector_description[1:-1].lower()}',
+            # 'start_datetime': utc_to_iso(metadata.start_date, timespec='milliseconds'),
+            # 'end_datetime': utc_to_iso(metadata.end_date, timespec='milliseconds'),
+            # 'platform': 'MEX',
+            # 'instruments': ['OMEGA'],
             'gsd': None,
-            # extra OMEGA_C_Proj_Record properties of interest
-            'orbit_number': metadata.orbit_number,
-            'cube_number': metadata.cube_number,
-            'data_quality_id': metadata.data_quality_id,
-            # PDSSP properties
-            'pdssp_solar_longitude': metadata.solar_longitude
+            # extra Vector_Features_Record properties of interest
         }
 
-        # append data file metadata if available
-        if data_path:
-            netcdf_file = Path(data_path) / 'data' / Path(metadata.download_nc).name
-            if netcdf_file.exists():
-                try:
-                    netcdf_metadata_dict = get_netcdf_properties(netcdf_file, SCHEMA_NAME)
-                    properties_dict.update(netcdf_metadata_dict)
-                except Exception as e:
-                    print(e)
-                    print(f'Unable to extract and add properties from NetCDF file: {netcdf_file}')
-            else:
-                print(f'Source data file not found: {netcdf_file!r}')
+        # # append data file metadata if available
+        # if data_path:
+        #     json_file = Path(data_path) / 'data' / Path(metadata.download).name
+        #     if json_file.exists():
+        #         try:
+        #             netcdf_metadata_dict = get_netcdf_properties(json_file)
+        #             print(netcdf_metadata_dict)
+        #             properties_dict.update(netcdf_metadata_dict)
+        #         except Exception as e:
+        #             print(e)
+        #             print(f'Unable to extract and add properties from source file: {json_file}')
+        #     else:
+        #         print(f'Source data file not found: {json_file!r}')
 
         return PDSSP_STAC_Properties(**properties_dict)
 
-    def get_ssys_properties(self, metadata: OMEGA_C_Proj_Record, definition: ItemDefinition = None) -> PDSSP_STAC_SsysProperties:
+    def get_ssys_properties(self, metadata: Vector_Features_Record, definition: ItemDefinition = None) -> PDSSP_STAC_SsysProperties:
         object_type = metadata_factory.get_object_type(metadata)
         if object_type == 'item':
             ssys_properties_dict = {
@@ -162,7 +143,7 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
 
         return PDSSP_STAC_SsysProperties(**ssys_properties_dict)
 
-    def get_ssys_fields(self, metadata: OMEGA_C_Proj_Record, definition: Union[ItemDefinition, CollectionDefinition] = None) -> dict:
+    def get_ssys_fields(self, metadata: Vector_Features_Record, definition: Union[ItemDefinition, CollectionDefinition] = None) -> dict:
         object_type = metadata_factory.get_object_type(metadata)
         if object_type == 'item':
             ssys_fields = {}
@@ -172,7 +153,7 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
             raise InvalidModelObjectTypeError(object_type)
         return ssys_fields
 
-    def get_sci_properties(self, metadata: OMEGA_C_Proj_Record, definition: ItemDefinition = None) -> Optional[PDSSP_STAC_SciProperties]:
+    def get_sci_properties(self, metadata: Vector_Features_Record, definition: ItemDefinition = None) -> Optional[PDSSP_STAC_SciProperties]:
         object_type = metadata_factory.get_object_type(metadata)
         if object_type == 'item':
             return None
@@ -180,7 +161,7 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
             raise InvalidModelObjectTypeError(object_type)
         # return PDSSP_STAC_SciProperties(**sci_properties_dict)
 
-    def get_sci_fields(self, metadata: OMEGA_C_Proj_Record, definition: Union[ItemDefinition, CollectionDefinition] = None) -> dict:
+    def get_sci_fields(self, metadata: Vector_Features_Record, definition: Union[ItemDefinition, CollectionDefinition] = None) -> dict:
         object_type = metadata_factory.get_object_type(metadata)
         if object_type == 'collection':
             # set sci_publications as dict (so as to make it "serializable")
@@ -200,7 +181,7 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
             raise InvalidModelObjectTypeError(object_type)
         return sci_fields
 
-    def get_processing_properties(self, metadata: OMEGA_C_Proj_Record, definition: ItemDefinition = None) -> Optional[PDSSP_STAC_ProcessingProperties]:
+    def get_processing_properties(self, metadata: Vector_Features_Record, definition: ItemDefinition = None) -> Optional[PDSSP_STAC_ProcessingProperties]:
         object_type = metadata_factory.get_object_type(metadata)
         if object_type == 'item':
             return None
@@ -208,7 +189,7 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
             raise InvalidModelObjectTypeError(object_type)
         # return PDSSP_STAC_ProcessingProperties(**processing_properties_dict)
 
-    def get_processing_fields(self, metadata: OMEGA_C_Proj_Record, definition: ItemDefinition = None) -> dict:
+    def get_processing_fields(self, metadata: Vector_Features_Record, definition: ItemDefinition = None) -> dict:
         object_type = metadata_factory.get_object_type(metadata)
         if object_type == 'collection':
             processing_fields = {
@@ -221,4 +202,4 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
         return processing_fields
 
 def register() -> None:
-    transformer_factory.register(SCHEMA_NAME, OMEGA_C_PROJ_STAC_Transformer)
+    transformer_factory.register(SCHEMA_NAME, VECTOR_FEATURES_STAC_Transformer)

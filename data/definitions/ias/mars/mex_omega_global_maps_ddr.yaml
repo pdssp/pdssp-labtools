@@ -4,15 +4,130 @@ collection:
     url: 'http://psup.ias.u-psud.fr/pgismarsraster/records'
     schema: 'OMEGA_MAP'
   extensions: [ 'ssys', 'processing', 'sci' ]
-  title: 'OMEGA Mars global mineral maps'
+  title: 'OMEGA Mars Global Mineral Maps'
   description: |
     OMEGA mineral maps are OMEGA-based NIR albedo, Ferric BD530, Ferric Nanophase, Olivine SP1, SP2, SP3,
     Pyroxene and Emissivity at 5.03µm. OMEGA is the VISNIR imaging spectrometer onboard ESA/Mars-Express spacecraft
     operating around Mars from January 2004.
   ssys_targets: ['Mars']
-  sci_publications:
-    - doi: 'doi:10.1029/2012JE004117'
-      citation: >
-        A. Ody, F. Poulet, Y. Langevin, J.‐P. Bibring, G. Bellucci, F. Altieri, B. Gondet, M. Vincendon, J.Carter
-        and N. Manaud (2012), Global maps of anhydrous minerals at the surface of Mars from OMEGA/MEx, J. Geophys.
-        Res., 117, E00J14.
+  processing_level: 'L4'
+  license: 'CC-BY-4.0'
+  keywords: ['global maps', 'albedo', 'emissivity', 'pyroxene', 'olivine', 'nanophase ferric oxides', 'ferric oxides']
+  items:
+    - id: 'albedo_r1080_equ_map'
+      links:
+        - href: 'http://idoc-wmsmars.ias.u-psud.fr/wmsmap?layers=omega_albedo_r1800'
+          rel: 'wms'
+          type: 'application/x-wms'
+          title: 'WMS Layer'
+      sci_publications:
+        - doi: 'doi:10.1029/2012JE004117'
+          citation: >
+            A. Ody, F. Poulet, Y. Langevin, J‐P. Bibring, G. Bellucci, F. Altieri, B. Gondet, M. Vincendon, J.Carter
+            and N. Manaud (2012), Global maps of anhydrous minerals at the surface of Mars from OMEGA/MEx, J. Geophys.
+            Res., 117, E00J14
+    - id: 'ferric_bd530_equ_map'
+      links:
+        - href: 'http://idoc-wmsmars.ias.u-psud.fr/wmsmap?layers=ferric_bd530_equ_map'
+          rel: 'wms'
+          type: 'application/x-wms'
+          title: 'WMS Layer'
+      sci_publications:
+        - doi: 'doi:10.1029/2012JE004117'
+          citation: >
+            A. Ody, F. Poulet, Y. Langevin, J‐P. Bibring, G. Bellucci, F. Altieri, B. Gondet, M. Vincendon, J.Carter
+            and N. Manaud (2012), Global maps of anhydrous minerals at the surface of Mars from OMEGA/MEx, J. Geophys.
+            Res., 117, E00J14
+    - id: 'ferric_nnphs_equ_map'
+      links:
+        - href: 'http://idoc-wmsmars.ias.u-psud.fr/wmsmap?layers=ferric_nnphs_equ_map'
+          rel: 'wms'
+          type: 'application/x-wms'
+          title: 'WMS Layer'
+      sci_publications:
+        - doi: 'doi:10.1029/2012JE004117'
+          citation: >
+            A. Ody, F. Poulet, Y. Langevin, J‐P. Bibring, G. Bellucci, F. Altieri, B. Gondet, M. Vincendon, J.Carter
+            and N. Manaud (2012), Global maps of anhydrous minerals at the surface of Mars from OMEGA/MEx, J. Geophys.
+            Res., 117, E00J14
+    - id: 'olivine_osp1_equ_map'
+      links:
+        - href: 'http://idoc-wmsmars.ias.u-psud.fr/wmsmap?layers=olivine_osp1_equ_map'
+          rel: 'wms'
+          type: 'application/x-wms'
+          title: 'WMS Layer'
+      sci_publications:
+        - doi: 'doi:10.1029/2012JE004117'
+          citation: >
+            A. Ody, F. Poulet, Y. Langevin, J‐P. Bibring, G. Bellucci, F. Altieri, B. Gondet, M. Vincendon, J.Carter
+            and N. Manaud (2012), Global maps of anhydrous minerals at the surface of Mars from OMEGA/MEx, J. Geophys.
+            Res., 117, E00J14
+    - id: 'olivine_osp2_equ_map'
+      links:
+        - href: 'http://idoc-wmsmars.ias.u-psud.fr/wmsmap?layers=omega_albedo_r1800'
+          rel: 'wms'
+          type: 'application/x-wms'
+          title: 'WMS Layer'
+      sci_publications:
+        - doi: 'doi:10.1029/2012JE004117'
+          citation: >
+            A. Ody, F. Poulet, Y. Langevin, J‐P. Bibring, G. Bellucci, F. Altieri, B. Gondet, M. Vincendon, J.Carter
+            and N. Manaud (2012), Global maps of anhydrous minerals at the surface of Mars from OMEGA/MEx, J. Geophys.
+            Res., 117, E00J14
+    - id: 'olivine_osp3_equ_map'
+      links:
+        - href: 'http://idoc-wmsmars.ias.u-psud.fr/wmsmap?layers=olivine_osp3_equ_map'
+          rel: 'wms'
+          type: 'application/x-wms'
+          title: 'WMS Layer'
+      sci_publications:
+        - doi: 'doi:10.1029/2012JE004117'
+          citation: >
+            A. Ody, F. Poulet, Y. Langevin, J‐P. Bibring, G. Bellucci, F. Altieri, B. Gondet, M. Vincendon, J.Carter
+            and N. Manaud (2012), Global maps of anhydrous minerals at the surface of Mars from OMEGA/MEx, J. Geophys.
+            Res., 117, E00J14
+    - id: 'pyroxene_bd2000_equ_map'
+      links:
+        - href: 'http://idoc-wmsmars.ias.u-psud.fr/wmsmap?layers=pyroxene_bd2000_equ_map'
+          rel: 'wms'
+          type: 'application/x-wms'
+          title: 'WMS Layer'
+      sci_publications:
+        - doi: 'doi:10.1029/2012JE004117'
+          citation: >
+            A. Ody, F. Poulet, Y. Langevin, J‐P. Bibring, G. Bellucci, F. Altieri, B. Gondet, M. Vincendon, J.Carter
+            and N. Manaud (2012), Global maps of anhydrous minerals at the surface of Mars from OMEGA/MEx, J. Geophys.
+            Res., 117, E00J14
+    - id: 'albedo_filled'
+      links:
+        - href: 'http://idoc-wmsmars.ias.u-psud.fr/wmsmap?layers=albedo_filled'
+          rel: 'wms'
+          type: 'application/x-wms'
+          title: 'WMS Layer'
+      sci_publications:
+        - doi: 'doi:10.1016/j.icarus.2014.10.029'
+          citation: >
+            M. Vincendon, J. Audouard, F. Altieri, A. Ody (2015), Mars Express measurements of surface albedo changes
+            over 2004–2010, In Icarus, Volume 251, 2015, Pages 145-163, ISSN 0019-1035
+    - id: 'albedo_unfilled'
+      links:
+        - href: 'http://idoc-wmsmars.ias.u-psud.fr/wmsmap?layers=albedo_unfilled'
+          rel: 'wms'
+          type: 'application/x-wms'
+          title: 'WMS Layer'
+      sci_publications:
+        - doi: 'doi:10.1016/j.icarus.2014.10.029'
+          citation: >
+            M. Vincendon, J. Audouard, F. Altieri, A. Ody (2015), Mars Express measurements of surface albedo changes
+            over 2004–2010, In Icarus, Volume 251, 2015, Pages 145-163, ISSN 0019-1035
+    - id: 'emissivite_5.03mic_OMEGA0'
+      links:
+        - href: 'http://idoc-wmsmars.ias.u-psud.fr/wmsmap?layers=emissivite_5.03mic_OMEGA0'
+          rel: 'wms'
+          type: 'application/x-wms'
+          title: 'WMS Layer'
+      sci_publications:
+        - doi: 'doi:10.1016/j.icarus.2014.10.029'
+          citation: >
+            J. Audouard, F. Poulet, M. Vincendon, J.-P. Bibring, F. Forget, Y. Langevin, B. Gondet (2014),
+            Mars surface thermal inertia and heterogeneities from OMEGA/MEX, In Icarus Volume 233, 2014, Pages 194-213

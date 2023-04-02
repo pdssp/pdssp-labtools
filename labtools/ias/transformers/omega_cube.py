@@ -1,8 +1,8 @@
-"""Transformer module for PSUP_OMEGA_C_PROJ metadata."""
+"""Transformer module for OMEGA_CUBE metadata."""
 
-from labtools.ias.schemas.omega_c_proj import (
+from labtools.ias.schemas.omega_cube import (
     SCHEMA_NAME,
-    OMEGA_C_Proj_Record,
+    OMEGA_Cube_Record,
     PSUP_Collection
 )
 from labtools.schemas.pdssp_stac import (
@@ -25,17 +25,21 @@ from labtools.schemas import factory as metadata_factory
 from labtools.utils import utc_to_iso
 from labtools.ias.netcdf import get_netcdf_footprint, get_netcdf_properties
 
+from geojson.geometry import Geometry
+
 from typing import Any, Dict, List, Union, Optional
 from pathlib import Path
 
 
-class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
+class OMEGA_CUBE_STAC_Transformer(AbstractTransformer):
 
-    def get_item_id(self, metadata: OMEGA_C_Proj_Record, definition: ItemDefinition = None) -> str:
+    def get_item_id(self, metadata: OMEGA_Cube_Record, definition: ItemDefinition = None) -> str:
         return Path(metadata.download_nc).stem
+        # return f'L3_{int(metadata.orbit_number):04}_{int(metadata.cube_number)}'
 
     def get_collection_id(self, metadata: PSUP_Collection, definition: CollectionDefinition = None) -> str:
-        return metadata.id
+        #assert metadata.id == definition.id
+        return definition.id
 
     # def get_stac_version(self, metadata: BaseModel) -> str:
     #     pass
@@ -43,7 +47,7 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
     # def get_item_links(self, metadata: BaseModel, definition: ItemDefinition = None) -> list[Link]:
     #     pass
 
-    def get_item_assets(self, metadata: OMEGA_C_Proj_Record, definition: ItemDefinition = None) -> Dict[str, PDSSP_STAC_Asset]:
+    def get_item_assets(self, metadata: OMEGA_Cube_Record, definition: ItemDefinition = None) -> Dict[str, PDSSP_STAC_Asset]:
         item_assets = {
             'nc_data_file': PDSSP_STAC_Asset(
                 href=metadata.download_nc,
@@ -81,7 +85,7 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
     # def get_keywords(self, metadata: BaseModel, definition: CollectionDefinition = None) -> list[str]:
     #     pass
 
-    def get_geometry(self, metadata: OMEGA_C_Proj_Record, definition: ItemDefinition = None, data_path: str = None) -> Optional[Dict[str, Any]]:
+    def get_geometry(self, metadata: OMEGA_Cube_Record, definition: ItemDefinition = None, data_path: str = None) -> Optional[Dict[str, Any]]:
         """Derives and returns footprint geometry from source data file.
         """
         geometry = None
@@ -100,7 +104,7 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
     # def get_extent(self, metadata: BaseModel, definition: CollectionDefinition = None) -> Extent:
     #     pass
 
-    def get_bbox(self, metadata: OMEGA_C_Proj_Record, definition: ItemDefinition = None) -> list[float]:
+    def get_bbox(self, metadata: OMEGA_Cube_Record, definition: ItemDefinition = None) -> list[float]:
         return [
             (float(metadata.westernmost_longitude) + 180.0) % 360.0 - 180.0,
             float(metadata.minimum_latitude),
@@ -117,21 +121,25 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
     # def get_summaries(self, metadata: BaseModel, definition: CollectionDefinition = None) -> Optional[Dict[str, Union[Range, List[Any], Dict[str, Any]]]]:
     #     pass
 
-    def get_properties(self, metadata: OMEGA_C_Proj_Record, definition: ItemDefinition = None, data_path: str = None) -> PDSSP_STAC_Properties:
+    def get_properties(self, metadata: OMEGA_Cube_Record, definition: ItemDefinition = None, data_path: str = None) -> PDSSP_STAC_Properties:
 
         properties_dict = {
-            'datetime': utc_to_iso(metadata.start_date,  timespec='milliseconds'),
-            'title': f'OMEGA {self.get_item_id(metadata, definition=definition)} Observation Map-Projected Data Cube',
+            'datetime': None,
             'created': None,
-            'start_datetime': utc_to_iso(metadata.start_date, timespec='milliseconds'),
-            'end_datetime': utc_to_iso(metadata.end_date, timespec='milliseconds'),
+            'start_datetime': None,
+            'end_datetime': None,
             'platform': 'MEX',
             'instruments': ['OMEGA'],
             'gsd': None,
-            # extra OMEGA_C_Proj_Record properties of interest
+            # extra OMEGA_Cube_Record properties of interest
             'orbit_number': metadata.orbit_number,
             'cube_number': metadata.cube_number,
             'data_quality_id': metadata.data_quality_id,
+            'martian_year': metadata.martian_year,
+            'pointing_mode': metadata.pointing_mode,
+            'l_channel_ok': metadata.l_channel_ok,
+            'c_channel_ok': metadata.vis_channel_ok,
+            'trimmed_orbit_number': metadata.trimmed_orbit_number,
             # PDSSP properties
             'pdssp_solar_longitude': metadata.solar_longitude
         }
@@ -142,6 +150,7 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
             if netcdf_file.exists():
                 try:
                     netcdf_metadata_dict = get_netcdf_properties(netcdf_file, SCHEMA_NAME)
+                    print(netcdf_metadata_dict)
                     properties_dict.update(netcdf_metadata_dict)
                 except Exception as e:
                     print(e)
@@ -151,7 +160,7 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
 
         return PDSSP_STAC_Properties(**properties_dict)
 
-    def get_ssys_properties(self, metadata: OMEGA_C_Proj_Record, definition: ItemDefinition = None) -> PDSSP_STAC_SsysProperties:
+    def get_ssys_properties(self, metadata: OMEGA_Cube_Record, definition: ItemDefinition = None) -> PDSSP_STAC_SsysProperties:
         object_type = metadata_factory.get_object_type(metadata)
         if object_type == 'item':
             ssys_properties_dict = {
@@ -162,7 +171,7 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
 
         return PDSSP_STAC_SsysProperties(**ssys_properties_dict)
 
-    def get_ssys_fields(self, metadata: OMEGA_C_Proj_Record, definition: Union[ItemDefinition, CollectionDefinition] = None) -> dict:
+    def get_ssys_fields(self, metadata: OMEGA_Cube_Record, definition: Union[ItemDefinition, CollectionDefinition] = None) -> dict:
         object_type = metadata_factory.get_object_type(metadata)
         if object_type == 'item':
             ssys_fields = {}
@@ -172,7 +181,7 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
             raise InvalidModelObjectTypeError(object_type)
         return ssys_fields
 
-    def get_sci_properties(self, metadata: OMEGA_C_Proj_Record, definition: ItemDefinition = None) -> Optional[PDSSP_STAC_SciProperties]:
+    def get_sci_properties(self, metadata: OMEGA_Cube_Record, definition: ItemDefinition = None) -> Optional[PDSSP_STAC_SciProperties]:
         object_type = metadata_factory.get_object_type(metadata)
         if object_type == 'item':
             return None
@@ -180,27 +189,26 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
             raise InvalidModelObjectTypeError(object_type)
         # return PDSSP_STAC_SciProperties(**sci_properties_dict)
 
-    def get_sci_fields(self, metadata: OMEGA_C_Proj_Record, definition: Union[ItemDefinition, CollectionDefinition] = None) -> dict:
+    def get_sci_fields(self, metadata: OMEGA_Cube_Record, definition: Union[ItemDefinition, CollectionDefinition] = None) -> dict:
         object_type = metadata_factory.get_object_type(metadata)
         if object_type == 'collection':
             # set sci_publications as dict (so as to make it "serializable")
             sci_publications = []
             for sci_publication in definition.sci_publications:
                 sci_publications.append(sci_publication.dict())
-            sci_fields = {}
-            if sci_publications:
-                sci_fields = {
-                    # 'sci:doi': '',
-                    # 'sci_citation': '',
-                    'sci:publications': sci_publications
-                }
+
+            sci_fields = {
+                # 'sci:doi': '',
+                # 'sci_citation': '',
+                'sci:publications': sci_publications
+            }
         elif object_type == 'item':
             sci_fields = {}
         else:
             raise InvalidModelObjectTypeError(object_type)
         return sci_fields
 
-    def get_processing_properties(self, metadata: OMEGA_C_Proj_Record, definition: ItemDefinition = None) -> Optional[PDSSP_STAC_ProcessingProperties]:
+    def get_processing_properties(self, metadata: OMEGA_Cube_Record, definition: ItemDefinition = None) -> Optional[PDSSP_STAC_ProcessingProperties]:
         object_type = metadata_factory.get_object_type(metadata)
         if object_type == 'item':
             return None
@@ -208,7 +216,7 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
             raise InvalidModelObjectTypeError(object_type)
         # return PDSSP_STAC_ProcessingProperties(**processing_properties_dict)
 
-    def get_processing_fields(self, metadata: OMEGA_C_Proj_Record, definition: ItemDefinition = None) -> dict:
+    def get_processing_fields(self, metadata: OMEGA_Cube_Record, definition: ItemDefinition = None) -> dict:
         object_type = metadata_factory.get_object_type(metadata)
         if object_type == 'collection':
             processing_fields = {
@@ -221,4 +229,4 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
         return processing_fields
 
 def register() -> None:
-    transformer_factory.register(SCHEMA_NAME, OMEGA_C_PROJ_STAC_Transformer)
+    transformer_factory.register(SCHEMA_NAME, OMEGA_CUBE_STAC_Transformer)

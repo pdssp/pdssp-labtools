@@ -8,3 +8,5 @@ definitions = Definitions(yaml_file=root_catalog_definition_file)
 
 # catalog_definition_dict = definitions.parse_yaml_catalog_file('./catalog.yaml')
 # catalog_definition = definitions.create_catalog_definition(catalog_definition_dict, '')
+
+collection_def = definitions.get_collection('mex_omega_global_maps_ddr')

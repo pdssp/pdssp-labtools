@@ -10,6 +10,8 @@ class OMEGA_Cube_Record(BaseModel):
     cube_number: str
     download_sav: str
     sav_human_file_size: str
+    download_nc: str
+    nc_human_file_size: str
     solar_longitude: float
     easternmost_longitude: float
     westernmost_longitude: float
@@ -24,7 +26,7 @@ class OMEGA_Cube_Record(BaseModel):
     trimmed_orbit_number: str
 
     def get_download_url(self):
-        return self.download_sav
+        return self.download_nc
 
 def register() -> None:
     factory.register(SCHEMA_NAME, OMEGA_Cube_Record, PSUP_Collection)
