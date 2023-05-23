@@ -125,6 +125,7 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
             'created': None,
             'start_datetime': utc_to_iso(metadata.start_date, timespec='milliseconds'),
             'end_datetime': utc_to_iso(metadata.end_date, timespec='milliseconds'),
+            'mission': 'Mars Express',
             'platform': 'MEX',
             'instruments': ['OMEGA'],
             'gsd': None,
@@ -133,7 +134,7 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
             'cube_number': metadata.cube_number,
             'data_quality_id': metadata.data_quality_id,
             # PDSSP properties
-            'pdssp_solar_longitude': metadata.solar_longitude
+            'solar_longitude': metadata.solar_longitude
         }
 
         # append data file metadata if available
@@ -186,7 +187,7 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
             # set sci_publications as dict (so as to make it "serializable")
             sci_publications = []
             for sci_publication in definition.sci_publications:
-                sci_publications.append(sci_publication.dict())
+                sci_publications.append(sci_publication.dict(exclude_none=True))
             sci_fields = {}
             if sci_publications:
                 sci_fields = {

@@ -114,11 +114,11 @@ class PDSSP_STAC_Properties(ItemProperties, extra=Extra.allow): # STAC Common Me
     # ssys_instrument_host: Optional[str]
     start_datetime: Optional[str] = Field(None, alias="start_datetime")
     end_datetime: Optional[str] = Field(None, alias="end_datetime")
-    pdssp_solar_longitude: Optional[float] = Field(None, alias="pdssp:solar_longitude")
-    pdssp_solar_distance: Optional[float] = Field(None, alias="pdssp:solar_distance")
-    pdssp_incidence_angle: Optional[float] = Field(None, alias="pdssp:incidence_angle")
-    pdssp_emission_angle: Optional[float] = Field(None, alias="pdssp:emission_angle")
-    pdssp_phase_angle: Optional[float] = Field(None, alias="pdssp:phase_angle")
+    solar_longitude: Optional[float] = Field(None, alias="solar_longitude")
+    solar_distance: Optional[float] = Field(None, alias="solar_distance")
+    incidence_angle: Optional[float] = Field(None, alias="incidence_angle")
+    emission_angle: Optional[float] = Field(None, alias="emission_angle")
+    phase_angle: Optional[float] = Field(None, alias="phase_angle")
 
 
 class PDSSP_STAC_Item(Item):
@@ -146,7 +146,7 @@ class PDSSP_STAC_SsysProperties(BaseModel):
 
 
 class PDSSP_STAC_SciPublication(BaseModel):
-    doi: Optional[str] = Field(..., alias="doi")
+    doi: Optional[str] #= Field(None, alias="doi")
     citation: Optional[str] = Field(..., alias="citation")
 
 

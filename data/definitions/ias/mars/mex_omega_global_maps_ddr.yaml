@@ -10,7 +10,7 @@ collection:
     Pyroxene and Emissivity at 5.03µm. OMEGA is the VISNIR imaging spectrometer onboard ESA/Mars-Express spacecraft
     operating around Mars from January 2004.
   ssys_targets: ['Mars']
-  processing_level: 'L4'
+  processing_level: 'Derived'
   license: 'CC-BY-4.0'
   keywords: ['global maps', 'albedo', 'emissivity', 'pyroxene', 'olivine', 'nanophase ferric oxides', 'ferric oxides']
   items:

@@ -89,7 +89,7 @@ def build_catalog(definitions, source_collections_files, stac_dir):
         # read product metadata from source collection file
         data_path = str(Path(source_collection_file).parent)
         products = psup.read_products_metadata(source_collection_file)
-        for product_metadata in products:
+        for product_metadata in products[:10]:
             # item_definition = None
             # item_definition = definitions.get_item_definition(collection_id, item_id=item_id)
             stac_item = transformer.create_stac_item(product_metadata, definition=collection_definition, collection_id=collection_id, data_path=data_path)

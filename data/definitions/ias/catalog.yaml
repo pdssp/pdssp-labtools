@@ -3,21 +3,32 @@ catalog:
   title: 'IAS Planetary Surface Data STAC Catalog'
   extensions: [ 'ssys', 'processing', 'sci' ]
   description: |
-    This is a test STAC catalog created, using [PDSSP Labtools](https://github.com/pdssp/pdssp-labtools), for planetary
-    surface datasets produced and/or provided by the Institut d'Astrophysique Spatiale (IAS). It currently holds one
-    Mars catalog, containing collections currently provided through [PSUP](http://psup.ias.u-psud.fr/sitools/client-user/index.html?project=PLISonMars)
-    (Planetary SUrface Portal).
+    This is a test STAC catalog providing access to planetary surface datasets currently hosted and distributed by
+    [PSUP](http://psup.ias.u-psud.fr/sitools/client-user/index.html?project=PLISonMars) (Planetary SUrface Portal).
 
-    ![Mars](https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Mars_%28white_background%29.jpg/120px-Mars_%28white_background%29.jpg)
+    ![psup_logo](https://drive.google.com/file/d/1olWC2qxIhUEGFWamJbZ2GSiJT1HGKHSg)
+#    ![psup_logo](https://psup.cnrs.fr/images/psup.png)
 
   ssys_targets: ['Mars']
   providers:
     - name: "Institut d'Astrophysique Spatiale (IAS) - IDOC"
       description: |
         The Integrated Data and Operation Center (IDOC) is responsible for processing, archiving
-        and distributing data from space science missions in which the institute is involved.
-      roles: ['producer', 'processor', 'host']
+        and distributing data from space science missions in which the IAS institute is involved.
+      roles: [ 'producer', 'processor', 'host' ]
       url: 'https://idoc.ias.universite-paris-saclay.fr'
+    - name: "Géosciences Paris-Saclay (GEOPS)"
+      description: |
+        GEOPS is a joint laboratory of the “Université de Paris-Sud” (UPSUD) and the "Centre National
+        de la Recherche Scientifique" (CNRS).
+      roles: [ 'producer', 'processor' ]
+      url: 'http://geops.geol.u-psud.fr'
+    - name: "Planetary SUrface Portal (PSUP)"
+      description: |
+        PSUP is a french research service, by Observatoire Paris-Sud and Observatoire de Lyon, to help
+        the distribution of high added-value datasets of planetary surfaces.
+      roles: [ 'licensor' ]
+      url: 'https://psup.cnrs.fr'
 #      processing:level: ''
   catalogs:
     - mars/catalog.yaml

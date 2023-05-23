@@ -20,12 +20,11 @@ collection:
     the cube refers to the length of scan. It can be 32, 64, or 128 pixels. It gives the first spatial dimension. The '
     third dimension refers to the rank of the scan. It is the second spatial dimension.
   ssys_targets: ['Mars']
-  processing_level: 'L3'
+  processing_level: 'Calibrated'
   license: 'CC-BY-4.0'
   keywords: ['map-projected']
   sci_publications:
-    - doi: ''
-      citation: >
+    - citation: >
         Vincendon M., Audouard J., Altieri F., Ody A., Mars Express measurements of surface albedo
         changes over 2004–2010, In Icarus, Volume 251, 2015, Pages 145-163, ISSN 0019-1035
     - doi: 'doi:10.1002/2014JE004649'
@@ -38,8 +37,7 @@ collection:
         Langevin, Y., J.-P. Bibring, F. Montmessin, F. Forget, M. Vincendon, S. Douté, F. Poulet, and
         B. Gondet (2007), Observations of the south seasonal cap of Mars during recession in 2004–2006 by the OMEGA
         visible/near-infrared imaging spectrometer on board Mars Express, J. Geophys. Res., 112, E08S12.
-    - doi: ''
-      citation: >
+    - citation: >
         Bibring et al (2004), OMEGA: Observatoire pour la Mineralogie, l'Eau, les Glaces et l'Activité, In:
         Mars Express: the scientific payload. ESA SP-1240, Noordwijk, Netherlands:ESA Publications Division,
         ISBN 92-9092-556-6, p. 37-49.

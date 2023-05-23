@@ -81,27 +81,19 @@ def get_netcdf_properties(netcdf_file, schema_name):
             nc_dataset = netCDF4.Dataset(netcdf_file, 'r')
             # derive i,e,phase angles from data product
             incidence_angle = float(np.mean(nc_dataset['incidence_n']).data)
-
-
             mean_tau = float(np.mean(nc_dataset['tau']).data)
-            if np.isnan(mean_tau):
-                mean_tau = str(mean_tau)
-
+            mean_tau = mean_tau if not np.isnan(mean_tau) else None
             mean_watericelin = float(np.mean(nc_dataset['watericelin']).data)
-            if np.isnan(mean_watericelin):
-                mean_watericelin = str(mean_watericelin)
-
+            mean_watericelin = mean_watericelin if not np.isnan(mean_watericelin) else None
             mean_icecloudindex = float(np.mean(nc_dataset['icecloudindex']).data)
-            if np.isnan(mean_icecloudindex):
-                mean_icecloudindex = str(mean_icecloudindex)
-
+            mean_icecloudindex = mean_icecloudindex if not np.isnan(mean_icecloudindex) else None
             return {
                 # 'title': nc_dataset.title,
                 # 'created': nc_dataset.history  # TODO: parse 'Created 28/03/18'
                 'mean_tau': mean_tau, # float(np.mean(nc_dataset['tau']).data),
                 'mean_watericelin': mean_watericelin,  # float(np.mean(nc_dataset['watericelin']).data),
                 'mean_icecloudindex': mean_icecloudindex,  # float(np.mean(nc_dataset['icecloudindex']).data),
-                'pdssp_incidence_angle': incidence_angle
+                'incidence_angle': incidence_angle
             }
         except Exception as e:
             print(e)
@@ -113,13 +105,19 @@ def get_netcdf_properties(netcdf_file, schema_name):
             # derive i,e,phase angles from data product
             incidence_angle = float(np.mean(nc_dataset['incidence_g']).data)
             emergence_angle = float(np.mean(nc_dataset['emergence_g']).data)
+            mean_tau = float(np.mean(nc_dataset['tau']).data)
+            mean_tau = mean_tau if not np.isnan(mean_tau) else None
+            mean_watericelin = float(np.mean(nc_dataset['watericelin']).data)
+            mean_watericelin = mean_watericelin if not np.isnan(mean_watericelin) else None
+            mean_icecloudindex = float(np.mean(nc_dataset['icecloudindex']).data)
+            mean_icecloudindex = mean_icecloudindex if not np.isnan(mean_icecloudindex) else None
             return {
                 'title': nc_dataset.title,
-                'mean_tau': None,
-                'mean_watericelin': float(np.mean(nc_dataset['watericelin']).data),
-                'mean_icecloudindex': None,
-                'pdssp_incidence_angle': incidence_angle,
-                'pdssp_emergence_angle': emergence_angle
+                'mean_tau': mean_tau,
+                'mean_watericelin': mean_watericelin,
+                'mean_icecloudindex': mean_icecloudindex,
+                'incidence_angle': incidence_angle,
+                'emergence_angle': emergence_angle
             }
         except Exception as e:
             print(e)

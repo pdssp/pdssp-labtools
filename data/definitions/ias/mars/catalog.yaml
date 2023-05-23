@@ -3,11 +3,13 @@ catalog:
   title: 'IAS Mars Data Catalog'
   extensions: [ 'ssys', 'processing', 'sci' ]
   description: |
-    This catalog contains Mars data collections and sub-catalogs, generated using [PDSSP Labtools](https://github.com/pdssp/pdssp-labtools)
-    on IAS [PSUP](http://psup.ias.u-psud.fr/sitools/client-user/index.html?project=PLISonMars) Mars/OMEGA datasets.
+    This test STAC catalog contains Mars data collections and sub-catalogs currently hosted and distributed by
+    [PSUP](http://psup.ias.u-psud.fr/sitools/client-user/index.html?project=PLISonMars) (Planetary SUrface Portal).
+
+    ![Mars](https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Mars_%28white_background%29.jpg/120px-Mars_%28white_background%29.jpg)
   ssys_targets: ['Mars']
-  catalogs:
-    - moccas/catalog.yaml
+#  catalogs:
+#    - moccas/catalog.yaml
   collections:
     - mex_omega_c_proj_ddr.yaml
     - mex_omega_cubes_rdr.yaml

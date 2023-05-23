@@ -11,7 +11,7 @@ collection:
     polar cap limits, Scalloped depressions and Lobate impact craters. This dataset contains vector catalogs
     and their associated metadatas. All catalogs are provided in GeoJSON file format.
   ssys_targets: ['Mars']
-  processing_level: 'L4'
+  processing_level: 'Derived'
   license: 'CC-BY-4.0'
   keywords: ['polar cap', 'seasonal', 'south', 'CO2', 'crocus line', 'inner crocus line', 'outer crocus line',
              'snowdrop distance', 'northern plains', 'periglacial', 'thermokarst', 'ground ice', 'global', 'craters',

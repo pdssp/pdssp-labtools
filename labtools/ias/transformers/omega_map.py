@@ -118,8 +118,11 @@ class OMEGA_MAP_STAC_Transformer(AbstractTransformer):
             'title': metadata.raster_description[1:-1] + ' Global Map',
             'description': metadata.raster_ldescription[1:-1],
             'created': None,
+            'start_datetime': '2004-01-08T12:46:15.000',
+            'end_datetime': '2010-08-20T00:46:05.000',
             # 'start_datetime': utc_to_iso(metadata.start_date, timespec='milliseconds'),
             # 'end_datetime': utc_to_iso(metadata.end_date, timespec='milliseconds'),
+            'mission': 'Mars Express',
             'platform': 'MEX',
             'instruments': ['OMEGA'],
             'gsd': None,
@@ -171,7 +174,7 @@ class OMEGA_MAP_STAC_Transformer(AbstractTransformer):
             # set sci_publications as dict (so as to make it "serializable")
             sci_publications = []
             for sci_publication in definition.sci_publications:
-                sci_publications.append(sci_publication.dict())
+                sci_publications.append(sci_publication.dict(exclude_none=True))
             sci_fields = {}
             if sci_publications:
                 sci_fields = {

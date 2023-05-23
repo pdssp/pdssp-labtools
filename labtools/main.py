@@ -4,17 +4,7 @@ from definitions import Definitions
 import loader
 from builder import build_catalog
 from ias import psup
-
 from labtools.schemas import factory as metadata_factory
-
-
-def download_data():
-    pass
-
-
-def build_index():
-    pass
-
 
 if __name__ == '__main__':  # sys.argv
     print("PDSSP Labtools")
