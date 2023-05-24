@@ -43,7 +43,8 @@ if __name__ == '__main__':  # sys.argv
     source_collections_files = []
     print('--- select collections to process')
     for collection_id in collections_ids:
-        collection_definition = definitions.get_collection(collection_id)
+        urn_collection_id = f'urn:pdssp:ias:collection:{collection_id}'  # temporary patch
+        collection_definition = definitions.get_collection(urn_collection_id)
         source_collection_file = Path(SOURCE_DATA_DIR) / collection_definition.get_source_collection_file()
         source_collections_files.append(source_collection_file)
         print(collection_definition.id, source_collection_file)

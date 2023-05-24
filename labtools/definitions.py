@@ -23,6 +23,20 @@ STAC_EXTENSIONS_URLS = {
     'processing': 'https://stac-extensions.github.io/processing/v1.1.0/schema.json'
 }
 
+
+def get_urn_id(id, parent_catalog=None):
+    urn_id = id
+    targets = ['mars']
+    labs = ['ias']
+    if id in labs:
+        urn_id = f'urn:pdssp:{id}'
+    elif id in targets:
+        urn_id = f'urn:pdssp:ias:body:{id}'
+    elif parent_catalog is not None:
+        urn_id = f'urn:pdssp:ias:collection:{id}'
+    return urn_id
+
+
 def get_stac_extension_prefix(stac_extension_url):
     for stac_extension_prefix in STAC_EXTENSIONS_URLS.keys():
         if stac_extension_url == STAC_EXTENSIONS_URLS[stac_extension_prefix]:
@@ -69,7 +83,9 @@ class CollectionDefinition(Collection):
     """Parent catalog path relative to root catalog definition path."""
 
     def get_source_collection_file(self):
-        return Path(self.path) / self.id / f'{self.id}.json'
+        id = self.id.split(':')[-1]
+        # return Path(self.path) / self.id / f'{self.id}.json'
+        return Path(self.path) / id / f'{id}.json'
 
 
 class CatalogDefinition(Catalog):
@@ -101,8 +117,8 @@ class Definitions:
     Input catalog is assumed to be the root catalog.
     """
     def __init__(self, yaml_file=''):
-        self.catalogs = [] # : list[CatalogDefinition]
-        self.collections = [] #: list[CollectionDefinition]
+        self.catalogs = []  # : list[CatalogDefinition]
+        self.collections = []  #: list[CollectionDefinition]
         self.path = yaml_file
         if yaml_file:
             self.load_root_catalog(yaml_file)
@@ -130,6 +146,10 @@ class Definitions:
     def create_catalog_definition(self, yaml_catalog_dict, parent_catalog_definition: CatalogDefinition = None) -> CatalogDefinition:
         """Returns a CatalogDefinition object for a given input YAML catalog dictionary.
         """
+        # update ID to be compliant with PDSSP urn-based schema
+        # print('>', yaml_catalog_dict['id'])
+        # print('>', get_urn_id(yaml_catalog_dict['id'], parent_catalog=parent_catalog_definition))
+        yaml_catalog_dict['id'] = get_urn_id(yaml_catalog_dict['id'], parent_catalog=parent_catalog_definition)
 
         # set 'stac_extensions' from extension prefix in `extensions` YAML dict
         stac_extensions_prefixes = yaml_catalog_dict['extensions']
@@ -178,6 +198,11 @@ class Definitions:
 
     def create_collection_definition(self, yaml_collection_dict, parent_catalog_definition: CatalogDefinition = None) -> CollectionDefinition:
         """Returns a CollectionDefinition object for input YAML collection dictionary."""
+
+        # update ID to be compliant with PDSSP urn-based schema
+        # print('>>', yaml_collection_dict['id'])
+        # print('>>', get_urn_id(yaml_collection_dict['id'], parent_catalog=parent_catalog_definition))
+        yaml_collection_dict['id'] = get_urn_id(yaml_collection_dict['id'], parent_catalog=parent_catalog_definition)
 
         # set 'stac_extensions' from extension prefix in `extensions` YAML dict
         stac_extensions_prefixes = yaml_collection_dict['extensions']

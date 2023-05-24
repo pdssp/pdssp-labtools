@@ -1,7 +1,7 @@
 """"PDSSP STAC schema.
 
 Wrapper around Pydantic models for STAC Catalogs, Collections, Items (and the STAC API spec) overwriting STAC models
-fields if necessary to compliant with specific data catalog producer/provider requirements. For example, a null geometry
+fields if necessary to be compliant with specific data catalog producer/provider requirements. For example, a null geometry
 might not be acceptable.
 
 https://github.com/stac-utils/stac-pydantic

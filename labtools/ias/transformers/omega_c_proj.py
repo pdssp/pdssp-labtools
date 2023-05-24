@@ -35,7 +35,8 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
         return f'OMEGA_L3_{Path(metadata.download_nc).stem}_CPROJ'  # OMEGA_L3_ORB0018_6_CPROJ
 
     def get_collection_id(self, metadata: PSUP_Collection, definition: CollectionDefinition = None) -> str:
-        return metadata.id
+        # return metadata.id
+        return definition.id
 
     # def get_stac_version(self, metadata: BaseModel) -> str:
     #     pass

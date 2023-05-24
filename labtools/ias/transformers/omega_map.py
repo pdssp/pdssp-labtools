@@ -38,7 +38,8 @@ class OMEGA_MAP_STAC_Transformer(AbstractTransformer):
         return Path(metadata.raster_name).stem
 
     def get_collection_id(self, metadata: PSUP_Collection, definition: CollectionDefinition = None) -> str:
-        return metadata.id
+        # return metadata.id
+        return definition.id
 
     # def get_stac_version(self, metadata: BaseModel) -> str:
     #     pass
