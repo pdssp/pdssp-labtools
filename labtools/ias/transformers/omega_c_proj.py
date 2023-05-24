@@ -88,6 +88,7 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
         geometry = None
         if data_path:
             netcdf_file = Path(data_path) / 'data' / Path(metadata.download_nc).name
+            # print('>', data_path, netcdf_file)
             if netcdf_file.exists():
                 try:
                     geometry = get_netcdf_footprint(netcdf_file)
@@ -188,8 +189,8 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
             # set sci_publications as dict (so as to make it "serializable")
             sci_publications = []
             for sci_publication in definition.sci_publications:
-                # sci_publications.append(sci_publication.dict(exclude_none=True))
-                sci_publications.append(sci_publication.dict())
+                sci_publications.append(sci_publication.dict(exclude_none=True))
+                # sci_publications.append(sci_publication.dict())
             sci_fields = {}
             if sci_publications:
                 sci_fields = {
