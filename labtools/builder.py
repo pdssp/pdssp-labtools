@@ -92,7 +92,7 @@ def build_catalog(definitions, source_collections_files, stac_dir):
         if urn_collection_id == 'urn:pdssp:ias:collection:mex_omega_cubes_rdr':  # temporary patch
             data_path = '/Users/nmanaud/workspace/pdssp/data/ias/source/mars/mex_omega_c_proj_ddr'
         products = psup.read_products_metadata(source_collection_file)
-        for product_metadata in products: #[12:22]:
+        for product_metadata in products[0:100]: #[12:22]:
             # item_definition = None
             # item_definition = definitions.get_item_definition(collection_id, item_id=item_id)
             stac_item = transformer.create_stac_item(product_metadata, definition=collection_definition, collection_id=collection_id, data_path=data_path)
