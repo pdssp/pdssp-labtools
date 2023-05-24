@@ -188,7 +188,8 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
             # set sci_publications as dict (so as to make it "serializable")
             sci_publications = []
             for sci_publication in definition.sci_publications:
-                sci_publications.append(sci_publication.dict(exclude_none=True))
+                # sci_publications.append(sci_publication.dict(exclude_none=True))
+                sci_publications.append(sci_publication.dict())
             sci_fields = {}
             if sci_publications:
                 sci_fields = {

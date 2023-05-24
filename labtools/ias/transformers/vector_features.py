@@ -106,11 +106,13 @@ class VECTOR_FEATURES_STAC_Transformer(AbstractTransformer):
     def get_properties(self, metadata: Vector_Features_Record, definition: ItemDefinition = None, data_path: str = None) -> PDSSP_STAC_Properties:
 
         properties_dict = {
-            'datetime': datetime.now(),
+            'datetime': utc_to_iso('2004-01-08T12:46:15.000', timespec='milliseconds'),
             'created': None,
             'title': f'Locations of "{metadata.vector_description[1:-1].title()}"',
             # 'start_datetime': utc_to_iso(metadata.start_date, timespec='milliseconds'),
             # 'end_datetime': utc_to_iso(metadata.end_date, timespec='milliseconds'),
+            'start_datetime': utc_to_iso('2004-01-08T12:46:15.000', timespec='milliseconds'),
+            'end_datetime': utc_to_iso('2010-08-20T00:46:05.000', timespec='milliseconds'),
             # 'platform': 'MEX',
             # 'instruments': ['OMEGA'],
             'gsd': None,

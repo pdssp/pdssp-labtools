@@ -6,7 +6,7 @@ catalog:
     This is a test STAC catalog providing access to planetary surface datasets currently hosted and distributed by
     [PSUP](http://psup.ias.u-psud.fr/sitools/client-user/index.html?project=PLISonMars) (Planetary SUrface Portal).
 
-    ![psup_logo](https://github.com/pdssp/pdssp-labtools/blob/cedc9e2d1b64f9b5167269e6799407e3524d192d/data/definitions/ias/psup.png)
+    ![psup_logo](https://raw.githubusercontent.com/pdssp/pdssp-labtools/cedc9e2d1b64f9b5167269e6799407e3524d192d/data/definitions/ias/psup.png)
 
   ssys_targets: ['Mars']
   providers:

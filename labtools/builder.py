@@ -85,9 +85,7 @@ def build_catalog(definitions, source_collections_files, stac_dir):
         print(f'creating and adding STAC collection: {urn_collection_id}.')
         transformer = transformer_factory.create_transformer(source_collection_metadata.schema_name)
         collection_definition = definitions.get_collection(urn_collection_id)
-        print(collection_definition.id)
         stac_collection = transformer.create_stac_collection(source_collection_metadata, definition=collection_definition)
-        print(stac_collection.id)
 
         # read product metadata from source collection file
         data_path = str(Path(source_collection_file).parent)
