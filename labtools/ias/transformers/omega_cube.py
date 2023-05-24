@@ -87,16 +87,16 @@ class OMEGA_CUBE_STAC_Transformer(AbstractTransformer):
         """Derives and returns footprint geometry from source data file.
         """
         geometry = None
-        # if data_path:
-        #     netcdf_file = Path(data_path) / 'data' / Path(metadata.download_nc).name
-        #     if netcdf_file.exists():
-        #         try:
-        #             geometry = get_netcdf_footprint(netcdf_file)
-        #         except Exception as e:
-        #             print(e)
-        #             print(f'Unable to extract footprint geometry from source NetCDF file: {netcdf_file}')
-        #     else:
-        #         print(f'Source data file not found: {netcdf_file!r}')
+        if data_path:
+            netcdf_file = Path(data_path) / 'data' / Path(metadata.download_nc).name
+            if netcdf_file.exists():
+                try:
+                    geometry = get_netcdf_footprint(netcdf_file)
+                except Exception as e:
+                    print(e)
+                    print(f'Unable to extract footprint geometry from source NetCDF file: {netcdf_file}')
+            else:
+                print(f'Source data file not found: {netcdf_file!r}')
         return geometry
 
     # def get_extent(self, metadata: BaseModel, definition: CollectionDefinition = None) -> Extent:
@@ -144,18 +144,18 @@ class OMEGA_CUBE_STAC_Transformer(AbstractTransformer):
         }
 
         # # append data file metadata if available
-        # if data_path:
-        #     netcdf_file = Path(data_path) / 'data' / Path(metadata.download_nc).name
-        #     if netcdf_file.exists():
-        #         try:
-        #             netcdf_metadata_dict = get_netcdf_properties(netcdf_file, SCHEMA_NAME)
-        #             print(netcdf_metadata_dict)
-        #             properties_dict.update(netcdf_metadata_dict)
-        #         except Exception as e:
-        #             print(e)
-        #             print(f'Unable to extract and add properties from NetCDF file: {netcdf_file}')
-        #     else:
-        #         print(f'Source data file not found: {netcdf_file!r}')
+        if data_path:
+            netcdf_file = Path(data_path) / 'data' / Path(metadata.download_nc).name
+            if netcdf_file.exists():
+                try:
+                    netcdf_metadata_dict = get_netcdf_properties(netcdf_file, SCHEMA_NAME)
+                    # print(netcdf_metadata_dict)
+                    properties_dict.update(netcdf_metadata_dict)
+                except Exception as e:
+                    print(e)
+                    print(f'Unable to extract and add properties from NetCDF file: {netcdf_file}')
+            else:
+                print(f'Source data file not found: {netcdf_file!r}')
 
         return PDSSP_STAC_Properties(**properties_dict)
 

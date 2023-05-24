@@ -1,3 +1,5 @@
 pydantic
 pystac
 stac-pydantic
+astropy
+pyMarsSeason @ git+https://github.com/pole-surfaces-planetaires/pymarsseason.git

@@ -25,6 +25,9 @@ from labtools.schemas import factory as metadata_factory
 from labtools.utils import utc_to_iso
 from labtools.ias.netcdf import get_netcdf_footprint, get_netcdf_properties
 
+from pymarsseason import PyMarsSeason, Hemisphere
+from astropy.time import Time
+
 from typing import Any, Dict, List, Union, Optional
 from pathlib import Path
 
@@ -145,12 +148,41 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
             if netcdf_file.exists():
                 try:
                     netcdf_metadata_dict = get_netcdf_properties(netcdf_file, SCHEMA_NAME)
+                    # print(netcdf_metadata_dict)
                     properties_dict.update(netcdf_metadata_dict)
                 except Exception as e:
                     print(e)
                     print(f'Unable to extract and add properties from NetCDF file: {netcdf_file}')
             else:
                 print(f'Source data file not found: {netcdf_file!r}')
+
+
+        # Add RESTO "_keyword" property to include Mars season. For example:
+        #
+        #         "_keywords": [
+        #             {
+        #                 "id": "season:summer",
+        #                 "title": "Summer",
+        #                 "type": "season"
+        #             }
+        #         ]
+        #
+        # init season keyword dict
+        season_keyword = {'id': '', 'title': '', 'type': 'season'}
+
+        # compute season
+        utc_time = properties_dict['datetime']
+        season = PyMarsSeason().compute_season_from_time(Time(utc_time, format='isot', scale='utc'))
+        season_str = season[Hemisphere.NORTH].value  # spring, summer, autumn, winter
+        season_keyword['id'] = f'season:{season_str}'
+        season_keyword['title'] = season_str.title()  # or 'Northern Hemisphere ' +
+
+        # add season keyword to "_keywords" dict
+        keywords = [season_keyword]
+        keywords_dict = {"_keywords": keywords}
+
+        # Update Item properties
+        properties_dict.update(keywords_dict)
 
         return PDSSP_STAC_Properties(**properties_dict)
 

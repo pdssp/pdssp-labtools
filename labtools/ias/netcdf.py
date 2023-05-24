@@ -8,6 +8,7 @@ import geojson
 from geojson import Polygon
 from datetime import datetime
 
+from labtools.utils import utc_to_iso
 
 def get_netcdf_footprint(netcdf_file) -> Optional[Dict[str, Any]]:
     """Returns the GeoJSON Geometry of a OMEGA_C_Channel_Proj NetCDF data product.
@@ -100,11 +101,12 @@ def get_netcdf_properties(netcdf_file, schema_name):
             print(f'Unable to read NetCDF data product: {netcdf_file}')
             return {}
     elif schema_name == 'OMEGA_CUBE':
+        # ATTENTION: Currently assuming that a OMEGA_C_PROJ NetCDF file is read so as to retrieve start and stop times
+        # mission in OMEGA_CUBE NetCDF files.
         try:
             nc_dataset = netCDF4.Dataset(netcdf_file, 'r')
             # derive i,e,phase angles from data product
-            incidence_angle = float(np.mean(nc_dataset['incidence_g']).data)
-            emergence_angle = float(np.mean(nc_dataset['emergence_g']).data)
+            incidence_angle = float(np.mean(nc_dataset['incidence_n']).data)
             mean_tau = float(np.mean(nc_dataset['tau']).data)
             mean_tau = mean_tau if not np.isnan(mean_tau) else None
             mean_watericelin = float(np.mean(nc_dataset['watericelin']).data)
@@ -112,12 +114,13 @@ def get_netcdf_properties(netcdf_file, schema_name):
             mean_icecloudindex = float(np.mean(nc_dataset['icecloudindex']).data)
             mean_icecloudindex = mean_icecloudindex if not np.isnan(mean_icecloudindex) else None
             return {
-                'title': nc_dataset.title,
-                'mean_tau': mean_tau,
-                'mean_watericelin': mean_watericelin,
-                'mean_icecloudindex': mean_icecloudindex,
-                'incidence_angle': incidence_angle,
-                'emergence_angle': emergence_angle
+                'datetime': utc_to_iso(nc_dataset.variables['start_time'].getValue(), timespec='milliseconds'),
+                'start_time': utc_to_iso(nc_dataset.variables['start_time'].getValue(), timespec='milliseconds'),
+                'end_time': utc_to_iso(nc_dataset.variables['stop_time'].getValue(), timespec='milliseconds'),
+                'mean_tau': mean_tau, # float(np.mean(nc_dataset['tau']).data),
+                'mean_watericelin': mean_watericelin,  # float(np.mean(nc_dataset['watericelin']).data),
+                'mean_icecloudindex': mean_icecloudindex,  # float(np.mean(nc_dataset['icecloudindex']).data),
+                'incidence_angle': incidence_angle
             }
         except Exception as e:
             print(e)
