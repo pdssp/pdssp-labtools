@@ -92,9 +92,13 @@ def build_catalog(definitions, source_collections_files, stac_dir):
         if urn_collection_id == 'urn:pdssp:ias:collection:mex_omega_cubes_rdr':  # temporary patch
             data_path = '/Users/nmanaud/workspace/pdssp/data/ias/source/mars/mex_omega_c_proj_ddr'
         products = psup.read_products_metadata(source_collection_file)
-        for product_metadata in products[0:100]: #[12:22]:
-            # item_definition = None
-            # item_definition = definitions.get_item_definition(collection_id, item_id=item_id)
+        for product_metadata in products[0:20]: #[12:22]:
+            if urn_collection_id == 'urn:pdssp:ias:collection:mex_omega_cubes_rdr':
+                product_id = Path(product_metadata.download_nc).name
+                data_file = Path(data_path) / Path('data/' + product_id)
+                if not data_file.exists():
+                    print(f'No corresponding OMEGA_C_PROJ NetCDF file for {product_id}: {data_file}.')
+                    continue
             stac_item = transformer.create_stac_item(product_metadata, definition=collection_definition, collection_id=collection_id, data_path=data_path)
             stac_collection.add_item(stac_item)
 
@@ -115,4 +119,5 @@ def build_catalog(definitions, source_collections_files, stac_dir):
     # stac_catalog.describe()
     root_stac_catalog.normalize_hrefs(str(stac_dir))
     root_stac_catalog.save(catalog_type=pystac.CatalogType.SELF_CONTAINED)
+
     print('Done.')

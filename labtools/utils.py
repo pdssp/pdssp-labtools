@@ -1,7 +1,7 @@
 from datetime import datetime
 
-def utc_to_iso(utc_time, timespec='auto'):
-    """Convert UTC time string to ISO format string (STAC standard).
+def utc_to_iso(utc_time, timespec='auto', datetime_fmt=None):
+    """Convert UTC time string to ISO/RFC 3339 format string (STAC standard).
     """
     # set valid datatime formats
     valid_formats = [
@@ -12,7 +12,11 @@ def utc_to_iso(utc_time, timespec='auto'):
     ]
     for valid_format in valid_formats:
         try:
-            return datetime.strptime(utc_time, valid_format).isoformat(timespec=timespec)
+            utc_datetime = datetime.strptime(utc_time, valid_format)
+            if datetime_fmt:
+                return utc_datetime
+            else:
+                return utc_datetime.isoformat(timespec=timespec)+'Z'
         except:
             continue
     return None

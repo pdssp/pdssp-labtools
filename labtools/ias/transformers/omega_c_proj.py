@@ -1,5 +1,7 @@
 """Transformer module for PSUP_OMEGA_C_PROJ metadata."""
 
+from pydantic import BaseModel
+
 from labtools.ias.schemas.omega_c_proj import (
     SCHEMA_NAME,
     OMEGA_C_Proj_Record,
@@ -18,7 +20,7 @@ from labtools.schemas.pdssp_stac import (
     PDSSP_STAC_SciProperties,
 )
 
-from labtools.definitions import ItemDefinition, CollectionDefinition
+from labtools.definitions import ItemDefinition, CollectionDefinition, CatalogDefinition, get_stac_extension_prefix, get_stac_extension_url
 from labtools.transformers.transformer import AbstractTransformer, InvalidModelObjectTypeError
 from labtools.transformers import factory as transformer_factory
 from labtools.schemas import factory as metadata_factory
@@ -73,8 +75,16 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
     # def get_collection_assets(self, metadata: BaseModel, definition: CollectionDefinition = None) -> Dict[str, Asset]:
     #     pass
 
-    # def get_stac_extensions(self, metadata: BaseModel) -> list[str]:
-    #     pass
+    # def get_stac_extensions(self, metadata: BaseModel, definition: Union[CollectionDefinition, CatalogDefinition] = None) -> list[str]:
+    #     # call parent method to retrieve STAC extensions defined at collection level that are inherited by default
+    #     stac_extensions = super().get_stac_extensions(metadata, definition=definition)
+    #
+    #     # remove 'scientific' and 'processing' extensions
+    #     stac_extensions_copy = stac_extensions.copy()
+    #     for stac_extension in stac_extensions:
+    #         if 'scientific' in stac_extension or 'processing' in stac_extension:
+    #             stac_extensions_copy.remove(stac_extension)
+    #     return stac_extensions_copy
 
     # def get_title(self, metadata: BaseModel, definition: CollectionDefinition = None) -> str:
     #     pass
@@ -123,7 +133,7 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
     #     pass
 
     def get_properties(self, metadata: OMEGA_C_Proj_Record, definition: ItemDefinition = None, data_path: str = None) -> PDSSP_STAC_Properties:
-
+        # print(utc_to_iso(metadata.start_date, timespec='milliseconds', datetime_fmt=True))
         properties_dict = {
             'datetime': utc_to_iso(metadata.start_date,  timespec='milliseconds'),
             # 'title': f'OMEGA Observation Map-Projected Data Cube #{self.get_item_id(metadata, definition=definition)}',
@@ -171,7 +181,7 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
         season_keyword = {'id': '', 'title': '', 'type': 'season'}
 
         # compute season
-        utc_time = properties_dict['datetime']
+        utc_time = properties_dict['datetime']  # .isoformat()
         season = PyMarsSeason().compute_season_from_time(Time(utc_time, format='isot', scale='utc'))
         season_str = season[Hemisphere.NORTH].value  # spring, summer, autumn, winter
         season_keyword['id'] = f'season:{season_str}'
@@ -202,7 +212,7 @@ class OMEGA_C_PROJ_STAC_Transformer(AbstractTransformer):
         if object_type == 'item':
             ssys_fields = {}
         elif object_type == 'collection':
-            ssys_fields = { 'ssys:targets': [definition.ssys_targets] }
+            ssys_fields = { 'ssys:targets': definition.ssys_targets }
         else:
             raise InvalidModelObjectTypeError(object_type)
         return ssys_fields

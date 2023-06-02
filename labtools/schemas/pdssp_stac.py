@@ -8,7 +8,7 @@ https://github.com/stac-utils/stac-pydantic
 
 """
 from typing import Any, Dict, List, Union, Optional
-from pydantic import BaseModel, Field, Extra
+from pydantic import BaseModel, Field, Extra, validator
 
 from labtools.schemas import factory
 
@@ -99,6 +99,7 @@ class PDSSP_STAC_Properties(ItemProperties, extra=Extra.allow): # STAC Common Me
     # title: Optional[str] #
     # description: Optional[str]
     # datetime: str  # ISO 8601 format
+    # datetime: str = Field(..., alias="datetime")
     # created: Optional[str]  # ISO 8601 format
     # updated: Optional[str]  # ISO 8601 format
     # start_datetime: Optional[str]  # ISO 8601 format
@@ -120,6 +121,9 @@ class PDSSP_STAC_Properties(ItemProperties, extra=Extra.allow): # STAC Common Me
     emission_angle: Optional[float] = Field(None, alias="emission_angle")
     phase_angle: Optional[float] = Field(None, alias="phase_angle")
 
+    # @validator("datetime")
+    # def validate_datetime(cls, v, values):
+    #     pass
 
 class PDSSP_STAC_Item(Item):
     ## type: str

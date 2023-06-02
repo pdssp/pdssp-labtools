@@ -38,8 +38,9 @@ if __name__ == '__main__':  # sys.argv
     collections_ids = ['mex_omega_c_proj_ddr', 'mex_omega_cubes_rdr', 'features_datasets', 'mex_omega_global_maps_ddr']
     # collections_ids = ['mex_omega_c_proj_ddr']
     # collections_ids = ['mex_omega_cubes_rdr']
-    # collections_ids = ['mex_omega_c_proj_ddr', 'features_datasets', 'mex_omega_global_maps_ddr']
-    # collections_ids = ['mex_omega_global_maps_ddr', 'features_datasets']
+    # collections_ids = ['features_datasets']
+    # collections_ids = ['mex_omega_global_maps_ddr']
+
     source_collections_files = []
     print('--- select collections to process')
     for collection_id in collections_ids:

@@ -202,33 +202,45 @@ class AbstractTransformer(ABC):
             item_definition = ItemDefinition(
                 id='*',
                 stac_version=definition.stac_version,
-                # properties={'datetime': datetime.now()},
                 assets={},
                 links=[],
-                extensions=definition.extensions,
-                stac_extensions=definition.stac_extensions,
+                extensions=['ssys'],  # by default, collection items only have the 'ssys' extension
+                stac_extensions=[get_stac_extension_url('ssys')],
                 sci_publications=[],
                 data_url=''
             )
             if hasattr(definition, 'items'):  # CollectionDefinition object with items definitions
-                # print()
-                # print(f'Item ID from metadata: {self.get_item_id(metadata)}, items definitions:')
+                # print('>')
+                # print(f'> Item ID from metadata: {self.get_item_id(metadata)}, items definitions:')
                 item_definition_found = False
                 for this_item_definition in definition.items:  # set item definition to definition with identical ID
-                    # print(f'- {this_item_definition.id}')
+                    # print(f'> - {this_item_definition.id}')
                     if this_item_definition.id == self.get_item_id(metadata):
                         item_definition = this_item_definition
                         item_definition_found = True
                         break
-                if item_definition_found: # inherit some definitions from parent collection
+                if item_definition_found:  # set extensions
                     item_definition.stac_version = definition.stac_version
-                    item_definition.stac_extensions = definition.stac_extensions
-                    item_definition.extensions = definition.extensions
+                    item_definition.extensions = ['ssys']  # always inherited
+                    item_definition.stac_extensions = []
+                    if hasattr(item_definition, 'sci_publications'):
+                        item_definition.extensions.append('sci')
+                        # print('> has sci_publications')
+                        # print('>', item_definition.extensions)
+                    if hasattr(item_definition, 'processing_level'):
+                        item_definition.extensions.append('processing')
+                        # print('> has processing_level')
+                        # print('>', item_definition.extensions)
+                    for extension in item_definition.extensions:
+                        if extension != 'ssys':
+                            item_definition.stac_extensions.append(get_stac_extension_url(extension))
+                    # print('>', item_definition.stac_extensions)
+
                     # item_definition.links = definition.links
                     # print(f'> found item definition: {item_definition!r}')
                     # print(f'>> links = {item_definition.links}')
-                    # print(f'>> sci_publications = {item_definition.sci_publications}')
-                    # print()
+                    # print(f'> sci_publications = {item_definition.sci_publications}')
+                    # print('>')
                 else:
                     # print('> no item definition found.')
                     pass
@@ -253,6 +265,9 @@ class AbstractTransformer(ABC):
             'collection': collection_id,
             'extra_fields': {}
         }
+
+        # print('>', stac_item_dict['properties'].datetime)
+
         # add STAC extensions extra fields
         for stac_extension_prefix in stac_extensions_prefixes:
             stac_item_dict['extra_fields'].update(
@@ -274,12 +289,16 @@ class AbstractTransformer(ABC):
             geometry = stac_item_metadata.geometry.dict()
 
         # create PySTAC Item
+        # print('>', stac_item_metadata.properties.start_datetime)
+        # print('>', stac_item_metadata.properties.end_datetime)
         stac_item = pystac.Item(
             id=stac_item_metadata.id,
             stac_extensions=stac_extensions,
             geometry=geometry,
             bbox=stac_item_metadata.bbox,
             datetime=stac_item_metadata.properties.datetime,  # datetime.fromisoformat(stac_item_metadata.properties['datetime']),
+            # start_datetime=stac_item_metadata.properties.start_datetime,
+            # end_datetime=stac_item_metadata.properties.end_datetime,
             properties=stac_item_metadata.properties.dict(exclude_unset=True),
             extra_fields=stac_item_metadata.extra_fields,  # eg: {'ssys:targets': stac_item_metadata.ssys_targets},
             collection=collection_id

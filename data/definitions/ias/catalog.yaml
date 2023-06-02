@@ -1,7 +1,7 @@
 catalog:
   id: 'ias'
   title: 'IAS Planetary Surface Data STAC Catalog'
-  extensions: [ 'ssys', 'processing', 'sci' ]
+  extensions: [ 'ssys' ]
   description: |
     This is a test STAC catalog providing access to planetary surface datasets currently hosted and distributed by
     [PSUP](http://psup.ias.u-psud.fr/sitools/client-user/index.html?project=PLISonMars) (Planetary SUrface Portal).

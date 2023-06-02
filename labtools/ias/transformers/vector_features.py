@@ -1,6 +1,8 @@
 """Transformer module for VECTOR_FEATURES metadata."""
 from typing import Any, Dict, List, Union, Optional
 
+from pydantic import BaseModel
+
 from labtools.ias.schemas.vector_features import (
     SCHEMA_NAME,
     Vector_Features_Record,
@@ -19,7 +21,7 @@ from labtools.schemas.pdssp_stac import (
     PDSSP_STAC_SciProperties,
 )
 
-from labtools.definitions import ItemDefinition, CollectionDefinition
+from labtools.definitions import ItemDefinition, CollectionDefinition, CatalogDefinition
 from labtools.transformers.transformer import AbstractTransformer, InvalidModelObjectTypeError
 from labtools.transformers import factory as transformer_factory
 from labtools.schemas import factory as metadata_factory
@@ -66,8 +68,16 @@ class VECTOR_FEATURES_STAC_Transformer(AbstractTransformer):
     # def get_collection_assets(self, metadata: BaseModel, definition: CollectionDefinition = None) -> Dict[str, Asset]:
     #     pass
 
-    # def get_stac_extensions(self, metadata: BaseModel) -> list[str]:
-    #     pass
+    # def get_stac_extensions(self, metadata: BaseModel, definition: Union[CollectionDefinition, CatalogDefinition] = None) -> list[str]:
+    #     # call parent method to retrieve STAC extensions defined at collection level that are inherited by default
+    #     stac_extensions = super().get_stac_extensions(metadata, definition=definition)
+    #
+    #     # remove 'scientific' and 'processing' extensions
+    #     stac_extensions_copy = stac_extensions.copy()
+    #     for stac_extension in stac_extensions:
+    #         if 'processing' in stac_extension or 'scientific' in stac_extension:
+    #             stac_extensions_copy.remove(stac_extension)
+    #     return stac_extensions_copy
 
     # def get_title(self, metadata: BaseModel, definition: CollectionDefinition = None) -> str:
     #     pass
@@ -151,7 +161,7 @@ class VECTOR_FEATURES_STAC_Transformer(AbstractTransformer):
         if object_type == 'item':
             ssys_fields = {}
         elif object_type == 'collection':
-            ssys_fields = { 'ssys:targets': [definition.ssys_targets] }
+            ssys_fields = { 'ssys:targets': definition.ssys_targets }
         else:
             raise InvalidModelObjectTypeError(object_type)
         return ssys_fields
@@ -159,10 +169,18 @@ class VECTOR_FEATURES_STAC_Transformer(AbstractTransformer):
     def get_sci_properties(self, metadata: Vector_Features_Record, definition: ItemDefinition = None) -> Optional[PDSSP_STAC_SciProperties]:
         object_type = metadata_factory.get_object_type(metadata)
         if object_type == 'item':
-            return None
+            sci_publications = []
+            for sci_publication in definition.sci_publications:
+                sci_publications.append(sci_publication.dict())
+
+            sci_properties_dict = {
+                # 'sci:doi': '',
+                # 'sci_citation': '',
+                'sci:publications': sci_publications
+            }
         else:
             raise InvalidModelObjectTypeError(object_type)
-        # return PDSSP_STAC_SciProperties(**sci_properties_dict)
+        return PDSSP_STAC_SciProperties(**sci_properties_dict)
 
     def get_sci_fields(self, metadata: Vector_Features_Record, definition: Union[ItemDefinition, CollectionDefinition] = None) -> dict:
         object_type = metadata_factory.get_object_type(metadata)

@@ -1,6 +1,8 @@
 """Transformer module for OMEGA_MAP metadata."""
 from typing import Any, Dict, List, Union, Optional
 
+from pydantic import BaseModel
+
 from labtools.ias.schemas.omega_map import (
     SCHEMA_NAME,
     OMEGA_Map_Record,
@@ -19,7 +21,7 @@ from labtools.schemas.pdssp_stac import (
     PDSSP_STAC_SciProperties,
 )
 
-from labtools.definitions import ItemDefinition, CollectionDefinition
+from labtools.definitions import ItemDefinition, CollectionDefinition, CatalogDefinition
 from labtools.transformers.transformer import AbstractTransformer, InvalidModelObjectTypeError
 from labtools.transformers import factory as transformer_factory
 from labtools.schemas import factory as metadata_factory
@@ -73,8 +75,16 @@ class OMEGA_MAP_STAC_Transformer(AbstractTransformer):
     # def get_collection_assets(self, metadata: BaseModel, definition: CollectionDefinition = None) -> Dict[str, Asset]:
     #     pass
 
-    # def get_stac_extensions(self, metadata: BaseModel) -> list[str]:
-    #     pass
+    # def get_stac_extensions(self, metadata: BaseModel, definition: Union[CollectionDefinition, CatalogDefinition] = None) -> list[str]:
+    #     # call parent method to retrieve STAC extensions defined at collection level that are inherited by default
+    #     stac_extensions = super().get_stac_extensions(metadata, definition=definition)
+    #
+    #     # remove 'scientific' and 'processing' extensions
+    #     stac_extensions_copy = stac_extensions.copy()
+    #     for stac_extension in stac_extensions:
+    #         if 'processing' in stac_extension or 'scientific' in stac_extension:
+    #             stac_extensions_copy.remove(stac_extension)
+    #     return stac_extensions_copy
 
     # def get_title(self, metadata: BaseModel, definition: CollectionDefinition = None) -> str:
     #     pass
@@ -148,7 +158,7 @@ class OMEGA_MAP_STAC_Transformer(AbstractTransformer):
         if object_type == 'item':
             ssys_fields = {}
         elif object_type == 'collection':
-            ssys_fields = { 'ssys:targets': [definition.ssys_targets] }
+            ssys_fields = { 'ssys:targets': definition.ssys_targets }
         else:
             raise InvalidModelObjectTypeError(object_type)
         return ssys_fields

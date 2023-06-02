@@ -3,7 +3,7 @@ collection:
   source:
     url: 'http://psup.ias.u-psud.fr/pgismarsvector/records'
     schema: 'VECTOR_FEATURES'
-  extensions: [ 'ssys', 'processing', 'sci' ]
+  extensions: [ 'ssys', 'processing' ]
   title: 'Mars Surface Features Location Datasets'
   description: |
     This collections holds locations data for hydrated mineral terrains, Central peaks hydrated phases between Isidis
@@ -18,105 +18,47 @@ collection:
              'ejecta', 'lithosphere', 'mineralogy']
   items:
     - id: 'hyd_global_290615'
-#      links:
-#        - href: 'http://idoc-wmsmars.ias.u-psud.fr/wmsmap?layers=omega_albedo_r1800'
-#          rel: 'wms'
-#          type: 'application/x-wms'
-#          title: 'WMS Layer'
-#      properties:
-#        instruments: ['OMEGA', 'CRISM']
       sci_publications:
-        - doi: 'doi:10.1029/2012JE004145'
+        - doi: '10.1029/2012JE004145'
           citation: >
             Carter, J., F. Poulet, J.‐P. Bibring, N. Mangold, and S. Murchie (2013), Hydrous minerals on Mars as seen
             by the CRISM and OMEGA imaging spectrometers: Updated global view, J. Geophys. Res. Planets, 118, 831–858
     - id: 'detections_crateres_benjamin_bultel_icarus'
-#      links:
-#        - href: 'http://idoc-wmsmars.ias.u-psud.fr/wmsmap?layers=ferric_bd530_equ_map'
-#          rel: 'wms'
-#          type: 'application/x-wms'
-#          title: 'WMS Layer'
       sci_publications:
-        - doi: 'doi:10.1016/j.icarus.2015.06.037'
+        - doi: '10.1016/j.icarus.2015.06.037'
           citation: >
             B. Bultel, C. Quantin-Nataf, M. Andréani, H. Clénet, L. Lozac’h (2015), Deep alteration between Hellas and
             Isidis Basins, In Icarus Volume 260, 2015, Pages 141-160
     - id: 'lcp_flahaut_et_al'
-#      links:
-#        - href: 'http://idoc-wmsmars.ias.u-psud.fr/wmsmap?layers=ferric_nnphs_equ_map'
-#          rel: 'wms'
-#          type: 'application/x-wms'
-#          title: 'WMS Layer'
       sci_publications:
-        - doi: 'doi:10.1016/j.icarus.2012.07.031'
+        - doi: '10.1016/j.icarus.2012.07.031'
           citation: >
             C. Quantin, J. Flahaut, H. Clenet, P. Allemand, P. Thomas (2012), Composition and structures of the
             subsurface in the vicinity of Valles Marineris as revealed by central uplifts of impact craters,
             Icarus, Volume 221, Issue 1, 2012, Pages 436-452
     - id: 'lcp_vmwalls'
-#      links:
-#        - href: 'http://idoc-wmsmars.ias.u-psud.fr/wmsmap?layers=olivine_osp1_equ_map'
-#          rel: 'wms'
-#          type: 'application/x-wms'
-#          title: 'WMS Layer'
       sci_publications:
-        - doi: 'doi:10.1016/j.icarus.2011.12.027'
+        - doi: '10.1016/j.icarus.2011.12.027'
           citation: >
             J. Flahaut, C. Quantin, H. Clenet, P. Allemand, J. F. Mustard, P. Thomas (2012), Pristine Noachian crust
             and key geologic transitions in the lower walls of Valles Marineris: Insights into early igneous processes
             on Mars, In Icarus, Volume 221, Issue 1, 2012, Pages 420-435
     - id: 'crocus_ls150-310'
-#      links:
-#        - href: 'http://idoc-wmsmars.ias.u-psud.fr/wmsmap?layers=omega_albedo_r1800'
-#          rel: 'wms'
-#          type: 'application/x-wms'
-#          title: 'WMS Layer'
       sci_publications:
-        - doi: 'doi:10.1016/j.pss.2010.03.018'
+        - doi: '10.1016/j.pss.2010.03.018'
           citation: >
             F. Schmidt, B. Schmitt, S. Douté, F. Forget, J.-J. Jian, P. Martin, Y. Langevin, J.-P. Bibring (2010),
             Sublimation of the Martian CO2 Seasonal South Polar Cap, In Planetary and Space Science, Volume 58,
             Issues 10, 2010, Pages 1129-1138
     - id: 'scalloped_depression'
-#      links:
-#        - href: 'http://idoc-wmsmars.ias.u-psud.fr/wmsmap?layers=olivine_osp3_equ_map'
-#          rel: 'wms'
-#          type: 'application/x-wms'
-#          title: 'WMS Layer'
       sci_publications:
-        - doi: 'doi:10.1016/j.pss.2011.09.004'
+        - doi: '10.1016/j.pss.2011.09.004'
           citation: >
             A.Séjourné, F.Costard, J.Gargani, R.J.Soare, C.Marmo (2012), Evidence of an eolian ice-rich and stratified
             permafrost in Utopia Planitia, Mars, In Icarus, Volume 60, Issue 1, 2012, Pages 248-254
     - id: 'costard_craters'
-#      links:
-#        - href: 'http://idoc-wmsmars.ias.u-psud.fr/wmsmap?layers=pyroxene_bd2000_equ_map'
-#          rel: 'wms'
-#          type: 'application/x-wms'
-#          title: 'WMS Layer'
       sci_publications:
-        - doi: 'doi:10.1007/BF00057747'
+        - doi: '10.1007/BF00057747'
           citation: >
             The spatial distribution of volatiles in the Martian hydrolithosphere, Earth Moon Planet,
             Volume 45, Pages 265-290
-
-#  sci_publications:
-#    - doi: ''
-#      citation: >
-#        Vincendon M., Audouard J., Altieri F., Ody A., Mars Express measurements of surface albedo
-#        changes over 2004–2010, In Icarus, Volume 251, 2015, Pages 145-163, ISSN 0019-1035
-#    - doi: 'doi:10.1002/2014JE004649'
-#      citation: >
-#        Audouard, J., F. Poulet, M. Vincendon, R. E. Milliken, D. Jouglet, J. Bibring, B. Gondet, and
-#        Y. Langevin (2014), Water in the Martian regolith from OMEGA/Mars Express, J. Geophys.
-#        Res. Planets,119, 1969–1989
-#    - doi: 'doi:10.1029/2006JE002841'
-#      citation: >
-#        Langevin, Y., J.-P. Bibring, F. Montmessin, F. Forget, M. Vincendon, S. Douté, F. Poulet, and
-#        B. Gondet (2007), Observations of the south seasonal cap of Mars during recession in 2004–2006 by the OMEGA
-#        visible/near-infrared imaging spectrometer on board Mars Express, J. Geophys. Res., 112, E08S12.
-#    - doi: ''
-#      citation: >
-#        Bibring et al (2004), OMEGA: Observatoire pour la Mineralogie, l'Eau, les Glaces et l'Activité, In:
-#        Mars Express: the scientific payload. ESA SP-1240, Noordwijk, Netherlands:ESA Publications Division,
-#        ISBN 92-9092-556-6, p. 37-49.
