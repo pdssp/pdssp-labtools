@@ -9,9 +9,13 @@ from labtools.schemas import factory as metadata_factory
 if __name__ == '__main__':  # sys.argv
     print("PDSSP Labtools")
     print('---')
+
     SOURCE_DATA_DIR = '/Users/nmanaud/workspace/pdssp/data/ias/source'
     YAML_DEFINITIONS_FILE = '/Users/nmanaud/workspace/pdssp/pdssp-labtools/data/definitions/ias/catalog.yaml'
     STAC_DATA_DIR = '/Users/nmanaud/workspace/pdssp/data/ias/stac'
+
+    N_MAX_ITEMS = 100  # maximum number of items to process per collection
+
     print(f'SOURCE_DATA_DIR       = {SOURCE_DATA_DIR}')
     print(f'YAML_DEFINITIONS_FILE = {YAML_DEFINITIONS_FILE}')
     print(f'STAC_DATA_DIR         = {STAC_DATA_DIR}')
@@ -30,8 +34,6 @@ if __name__ == '__main__':  # sys.argv
 
     # load definitions (note: acting as an element of a local data catalog service)
     definitions = Definitions(yaml_file=YAML_DEFINITIONS_FILE)
-
-    # print(definitions.catalog_tree())
 
     # set defined collections to be processed (filtering for dev tests)
     # collections_ids = definitions.get_collections_ids()
@@ -72,7 +74,7 @@ if __name__ == '__main__':  # sys.argv
 
     print('--- build catalog')
     # test build catalog
-    build_catalog(definitions, source_collections_files, stac_dir=STAC_DATA_DIR)
+    build_catalog(definitions, source_collections_files, stac_dir=STAC_DATA_DIR, n_max_items=N_MAX_ITEMS)
     # print('Skipped.')
     # print()
 

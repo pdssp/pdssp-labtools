@@ -7,10 +7,6 @@ from labtools.transformers import factory as transformer_factory
 from labtools.definitions import Definitions, CatalogDefinition, get_urn_id
 from labtools.ias import psup as psup
 
-# from pydantic import BaseModel, Field
-# from typing import Dict, List, Union, Optional
-
-
 def create_stac_catalog(catalog_definition: CatalogDefinition) -> pystac.Catalog:
     return pystac.Catalog(
         id=catalog_definition.id,
@@ -98,7 +94,7 @@ class Layout(BestPracticesLayoutStrategy):
 
 layout = Layout()
 
-def build_catalog(definitions, source_collections_files, stac_dir):
+def build_catalog(definitions, source_collections_files, stac_dir, n_max_items=None):
 
     stac_dir = Path(stac_dir)
     if stac_dir.exists():
@@ -122,7 +118,9 @@ def build_catalog(definitions, source_collections_files, stac_dir):
         if urn_collection_id == 'urn:pdssp:ias:collection:mex_omega_cubes_rdr':  # temporary patch
             data_path = '/Users/nmanaud/workspace/pdssp/data/ias/source/mars/mex_omega_c_proj_ddr'
         products = psup.read_products_metadata(source_collection_file)
-        for product_metadata in products[0:20]: #[12:22]:
+        if n_max_items:
+            products = products[0:n_max_items]
+        for product_metadata in products:
             if urn_collection_id == 'urn:pdssp:ias:collection:mex_omega_cubes_rdr':
                 product_id = Path(product_metadata.download_nc).name
                 data_file = Path(data_path) / Path('data/' + product_id)
@@ -136,8 +134,6 @@ def build_catalog(definitions, source_collections_files, stac_dir):
         stac_collection.update_extent_from_items()
 
         # add collection to the output STAC catalog
-        # print(get_urn_id(collection_definition.path))
-        # stac_catalog = root_stac_catalog.get_child(collection_definition.path)  # TODO: add and use a new `parent_catalog` property to CollectionDefinition class instead of `path`
         stac_catalog = root_stac_catalog.get_child(get_urn_id(collection_definition.path))
         stac_catalog.add_child(stac_collection)
         print()
@@ -146,8 +142,6 @@ def build_catalog(definitions, source_collections_files, stac_dir):
     print()
     print(f'saving to: {str(stac_dir)}')
     Path.mkdir(stac_dir, parents=True, exist_ok=True)
-    # stac_catalog.describe()
-    # root_stac_catalog.normalize_hrefs(str(stac_dir))
     root_stac_catalog.normalize_hrefs(str(stac_dir), strategy=layout)
     root_stac_catalog.save(catalog_type=pystac.CatalogType.SELF_CONTAINED)
 
