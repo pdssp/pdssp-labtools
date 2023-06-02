@@ -7,7 +7,7 @@ collection:
   title: 'OMEGA C-channel Map-Projected Observations Data Cubes'
   description: |
     These data cubes have been specifically selected and filtered for studies of the *surface mineralogy* between
-    1 and 2.5 microns.
+    1 and 2.5 μm.
 
     They contain all the OMEGA observations acquired with the C channel after filtering. Filtering processes have been
     implemented to remove some instrumental artefacts and observational conditions. Each OMEGA record is available as
@@ -27,12 +27,12 @@ collection:
     - citation: >
         Vincendon M., Audouard J., Altieri F., Ody A., Mars Express measurements of surface albedo
         changes over 2004–2010, In Icarus, Volume 251, 2015, Pages 145-163, ISSN 0019-1035
-    - doi: 'doi:10.1002/2014JE004649'
+    - doi: '10.1002/2014JE004649'
       citation: >
         Audouard, J., F. Poulet, M. Vincendon, R. E. Milliken, D. Jouglet, J. Bibring, B. Gondet, and
         Y. Langevin (2014), Water in the Martian regolith from OMEGA/Mars Express, J. Geophys.
         Res. Planets,119, 1969–1989
-    - doi: 'doi:10.1029/2006JE002841'
+    - doi: '10.1029/2006JE002841'
       citation: >
         Langevin, Y., J.-P. Bibring, F. Montmessin, F. Forget, M. Vincendon, S. Douté, F. Poulet, and
         B. Gondet (2007), Observations of the south seasonal cap of Mars during recession in 2004–2006 by the OMEGA

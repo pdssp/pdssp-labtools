@@ -1,7 +1,6 @@
 catalog:
   id: 'mars'
   title: 'IAS Mars Data Catalog'
-#  extensions: [ 'ssys', 'processing', 'sci' ]
   extensions: [ 'ssys' ]
   description: |
     This test STAC catalog contains Mars data collections and sub-catalogs currently hosted and distributed by

@@ -67,6 +67,36 @@ def create_root_catalog(definitions: Definitions) -> pystac.Catalog:
 
     return stac_catalog
 
+from pystac.layout import BestPracticesLayoutStrategy
+from pystac.utils import JoinType, join_path_or_url, safe_urlparse
+
+class Layout(BestPracticesLayoutStrategy):
+    """Custom layout to use non-URI-based IDs
+    """
+    def get_catalog_href(self, cat, parent_dir: str, is_root: bool) -> str:
+        parsed_parent_dir = safe_urlparse(parent_dir)
+        join_type = JoinType.from_parsed_uri(parsed_parent_dir)
+
+        if is_root:
+            cat_root = parent_dir
+        else:
+            catalog_name = cat.id.split(':')[-1]
+            cat_root = join_path_or_url(join_type, parent_dir, "{}".format(catalog_name))
+
+        return join_path_or_url(join_type, cat_root, cat.DEFAULT_FILE_NAME)
+
+    def get_collection_href(self, col, parent_dir, is_root) -> str:
+        parsed_parent_dir = safe_urlparse(parent_dir)
+        join_type = JoinType.from_parsed_uri(parsed_parent_dir)
+
+        if is_root:
+            col_root = parent_dir
+        else:
+            collection_name = col.id.split(':')[-1]
+            col_root = join_path_or_url(join_type, parent_dir, "{}".format(collection_name))
+        return join_path_or_url(join_type, col_root, col.DEFAULT_FILE_NAME)
+
+layout = Layout()
 
 def build_catalog(definitions, source_collections_files, stac_dir):
 
@@ -117,7 +147,8 @@ def build_catalog(definitions, source_collections_files, stac_dir):
     print(f'saving to: {str(stac_dir)}')
     Path.mkdir(stac_dir, parents=True, exist_ok=True)
     # stac_catalog.describe()
-    root_stac_catalog.normalize_hrefs(str(stac_dir))
+    # root_stac_catalog.normalize_hrefs(str(stac_dir))
+    root_stac_catalog.normalize_hrefs(str(stac_dir), strategy=layout)
     root_stac_catalog.save(catalog_type=pystac.CatalogType.SELF_CONTAINED)
 
     print('Done.')
