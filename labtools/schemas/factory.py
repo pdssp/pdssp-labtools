@@ -51,4 +51,5 @@ def create_metadata_object(metadata_dict: dict[str, Any], schema_name: str, obje
         creator_func = metadata_creation_funcs[schema_name][object_type]
     except KeyError:
         raise ValueError(f'No schema defined for {schema_name!r} schema {object_type!r} object type.') from None
+    # print(metadata_dict)
     return creator_func(**metadata_dict)

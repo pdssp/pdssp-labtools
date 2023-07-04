@@ -94,7 +94,7 @@ class Layout(BestPracticesLayoutStrategy):
 
 layout = Layout()
 
-def build_catalog(definitions, source_collections_files, stac_dir, n_max_items=None):
+def build_catalog(definitions, source_collections_files, stac_dir, item_start=0, n_max_items=None):
 
     stac_dir = Path(stac_dir)
     if stac_dir.exists():
@@ -104,6 +104,9 @@ def build_catalog(definitions, source_collections_files, stac_dir, n_max_items=N
     root_stac_catalog = create_root_catalog(definitions)
 
     for source_collection_file in source_collections_files:
+        stac_collection = None  # to free memory (test)
+        n_items = 0
+
         # create STAC collection corresponding to input collection ID and add to STAC catalog
         source_collection_metadata = psup.read_collection_metadata(source_collection_file)
         collection_id = source_collection_metadata.id
@@ -116,19 +119,32 @@ def build_catalog(definitions, source_collections_files, stac_dir, n_max_items=N
         # read product metadata from source collection file
         data_path = str(Path(source_collection_file).parent)
         if urn_collection_id == 'urn:pdssp:ias:collection:mex_omega_cubes_rdr':  # temporary patch
-            data_path = '/Users/nmanaud/workspace/pdssp/data/ias/source/mars/mex_omega_c_proj_ddr'
+            # data_path = '/Users/nmanaud/workspace/pdssp/data/ias/source/mars/mex_omega_c_proj_ddr'
+            data_path = '/Volumes/Data/pdssp/psup/source/mars/mex_omega_c_proj_ddr'
         products = psup.read_products_metadata(source_collection_file)
-        if n_max_items:
+        if n_max_items and not item_start:
             products = products[0:n_max_items]
+        elif n_max_items and item_start:
+            products = products[item_start:item_start+n_max_items]
+        elif not n_max_items and item_start:
+            products = products[item_start:]
+
         for product_metadata in products:
+            n_items += 1
             if urn_collection_id == 'urn:pdssp:ias:collection:mex_omega_cubes_rdr':
                 product_id = Path(product_metadata.download_nc).name
                 data_file = Path(data_path) / Path('data/' + product_id)
                 if not data_file.exists():
                     print(f'No corresponding OMEGA_C_PROJ NetCDF file for {product_id}: {data_file}.')
                     continue
-            stac_item = transformer.create_stac_item(product_metadata, definition=collection_definition, collection_id=collection_id, data_path=data_path)
-            stac_collection.add_item(stac_item)
+            print(f'{n_items}/{len(products)}')
+            try:
+                stac_item = transformer.create_stac_item(product_metadata, definition=collection_definition, collection_id=collection_id, data_path=data_path)
+                stac_collection.add_item(stac_item)
+            except Exception as e:
+                print(e)
+                print(f'WARNING: The following source product could not be transformed; not added to collection:')
+                print(product_metadata)
 
         # update collection extent from items
         stac_collection.update_extent_from_items()

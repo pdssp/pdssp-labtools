@@ -1,10 +1,13 @@
+import os
 from contextlib import closing
-from urllib.request import urlretrieve
+# from urllib.request import urlretrieve
 import requests
 from pathlib import Path
 import json
 from pydantic import BaseModel
 import shutil
+
+import netCDF4
 
 from labtools.schemas import factory
 
@@ -22,6 +25,7 @@ def download_collection(collection_id, psup_url, metadata_schema, output_dir='so
 
     if source_collection_file.exists() and not overwrite:
         print(f'Output source collection file already exists: {source_collection_file!r}.')
+        print()
         return source_collection_file
 
     # check connection and get the total number of products
@@ -110,15 +114,22 @@ def read_products_metadata(source_collection_file):
 
     return products
 
-def download_data_files(source_collection_file, overwrite=False):
+
+def download_data_files(source_collection_file, overwrite=False, n_max_items=None):
     products = read_products_metadata(source_collection_file)
 
-    # MAX_N_PRODUCTS = 10
-    # if products:
-    #     products = products[:MAX_N_PRODUCTS]
-    # else:
-    #     print(f'No products found in {source_collection_file!r}.')
-    #     return
+    list_file = Path(source_collection_file).parent / 'list.txt'
+    products_list = []
+    if list_file.exists():
+        with open(list_file) as f:
+            products_list = [line.rstrip() for line in f]
+
+    if products:
+        if n_max_items:
+            products = products[:n_max_items]
+    else:
+        print(f'No products found in {source_collection_file!r}.')
+        return
 
     if not products:
         print(f'No products found in {source_collection_file!r}.')
@@ -141,16 +152,39 @@ def download_data_files(source_collection_file, overwrite=False):
             # shutil.rmtree(data_dir)\
             data_dir.mkdir()
 
-        print(f'Downloading {product_fname} ...', end='')
         product_path = data_dir / product_fname
         if not product_path.exists() or overwrite:
-            try:
-                # print(url, product_path)
-                urlretrieve(url, product_path)
-                print('DONE')
-            except Exception as e:
-                product_path = ''
-                print('ERROR')
-                print(e)
+            if not products_list:
+                products_to_download = [product_fname]
+            else:
+                products_to_download = products_list
+            if product_fname in products_to_download:
+                print(f'Downloading from {url} ({product_metadata.nc_human_file_size:<10}) to {product_path} ...')
+                try:
+                    # urlretrieve(url, product_path)
+                    r = requests.get(url, allow_redirects=True)
+                    if r.status_code != 200:
+                        raise ConnectionError(f'could not download {url}\nerror code: {r.status_code}')
+                    product_path.write_bytes(r.content)
+
+                    size_str = f"{os.stat(product_path).st_size / (1014*1024):.1f}"
+                    print(f'DONE ({size_str} MB)')
+                    print()
+                except Exception as e:
+                    print('ERROR')
+                    print(e)
+                    # os.remove(product_path)
+                    # print(f'Removed {product_path} file.')
+                    print()
         else:
-            print('EXISTS')
+            # check that NetCDF file is readable
+            try:
+                r = netCDF4.Dataset(product_path, 'r')
+                r.close()
+            except:
+                print(f'WARNING: {product_path} not a readable NetCDF file.')
+                # os.remove(product_path)
+                # if not product_path.exists():
+                #     print(f'Removed {product_path} file.')
+                # print('EXISTS')
+                # print()

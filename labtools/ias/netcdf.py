@@ -71,6 +71,8 @@ def get_netcdf_footprint(netcdf_file) -> Optional[Dict[str, Any]]:
 
     geometry = json.loads(geojson.dumps(Polygon([poly_geopts])))
 
+    nc_dataset.close()
+
     return geometry
 
 
@@ -88,7 +90,7 @@ def get_netcdf_properties(netcdf_file, schema_name):
             mean_watericelin = mean_watericelin if not np.isnan(mean_watericelin) else None
             mean_icecloudindex = float(np.mean(nc_dataset['icecloudindex']).data)
             mean_icecloudindex = mean_icecloudindex if not np.isnan(mean_icecloudindex) else None
-            return {
+            props = {
                 # 'title': nc_dataset.title,
                 # 'created': nc_dataset.history  # TODO: parse 'Created 28/03/18'
                 'mean_tau': mean_tau, # float(np.mean(nc_dataset['tau']).data),
@@ -96,6 +98,8 @@ def get_netcdf_properties(netcdf_file, schema_name):
                 'mean_icecloudindex': mean_icecloudindex,  # float(np.mean(nc_dataset['icecloudindex']).data),
                 'incidence_angle': incidence_angle
             }
+            nc_dataset.close()
+            return props
         except Exception as e:
             print(e)
             print(f'Unable to read NetCDF data product: {netcdf_file}')
@@ -113,7 +117,7 @@ def get_netcdf_properties(netcdf_file, schema_name):
             mean_watericelin = mean_watericelin if not np.isnan(mean_watericelin) else None
             mean_icecloudindex = float(np.mean(nc_dataset['icecloudindex']).data)
             mean_icecloudindex = mean_icecloudindex if not np.isnan(mean_icecloudindex) else None
-            return {
+            props = {
                 'datetime': utc_to_iso(nc_dataset.variables['start_time'].getValue(), timespec='milliseconds'),
                 'start_time': utc_to_iso(nc_dataset.variables['start_time'].getValue(), timespec='milliseconds'),
                 'end_time': utc_to_iso(nc_dataset.variables['stop_time'].getValue(), timespec='milliseconds'),
@@ -122,6 +126,8 @@ def get_netcdf_properties(netcdf_file, schema_name):
                 'mean_icecloudindex': mean_icecloudindex,  # float(np.mean(nc_dataset['icecloudindex']).data),
                 'incidence_angle': incidence_angle
             }
+            nc_dataset.close()
+            return props
         except Exception as e:
             print(e)
             print(f'Unable to read NetCDF data product: {netcdf_file}')
