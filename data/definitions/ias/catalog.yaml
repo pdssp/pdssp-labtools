@@ -9,25 +9,6 @@ catalog:
     ![psup_logo](https://raw.githubusercontent.com/pdssp/pdssp-labtools/cedc9e2d1b64f9b5167269e6799407e3524d192d/data/definitions/ias/psup.png)
 
   ssys_targets: ['Mars']
-  providers:
-    - name: "Institut d'Astrophysique Spatiale (IAS) - IDOC"
-      description: |
-        The Integrated Data and Operation Center (IDOC) is responsible for processing, archiving
-        and distributing data from space science missions in which the IAS institute is involved.
-      roles: [ 'producer', 'processor', 'host' ]
-      url: 'https://idoc.ias.universite-paris-saclay.fr'
-    - name: "Géosciences Paris-Saclay (GEOPS)"
-      description: |
-        GEOPS is a joint laboratory of the “Université de Paris-Sud” (UPSUD) and the "Centre National
-        de la Recherche Scientifique" (CNRS).
-      roles: [ 'producer', 'processor' ]
-      url: 'http://geops.geol.u-psud.fr'
-    - name: "Planetary SUrface Portal (PSUP)"
-      description: |
-        PSUP is a french research service, by Observatoire Paris-Sud and Observatoire de Lyon, to help
-        the distribution of high added-value datasets of planetary surfaces.
-      roles: [ 'licensor' ]
-      url: 'https://psup.cnrs.fr'
 #      processing:level: ''
   catalogs:
     - mars/catalog.yaml
