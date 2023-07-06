@@ -20,7 +20,8 @@ from datetime import datetime
 STAC_EXTENSIONS_URLS = {
     'ssys': 'https://raw.githubusercontent.com/thareUSGS/ssys/main/json-schema/schema.json',
     'sci': 'https://stac-extensions.github.io/scientific/v1.0.0/schema.json',
-    'processing': 'https://stac-extensions.github.io/processing/v1.1.0/schema.json'
+    'processing': 'https://stac-extensions.github.io/processing/v1.1.0/schema.json',
+    'proj': 'https://stac-extensions.github.io/projection/v1.1.0/schema.json'
 }
 
 
