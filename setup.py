@@ -11,7 +11,7 @@ setup(
         'pystac',
         'stac-pydantic',
         'astropy',
-        'pyMarsSeason @ git+https://github.com/pole-surfaces-planetaires/pymarsseason.git'
+        'pyMarsSeason @ git+https://github.com/pdssp/pymarsseason.git'
     ],
     entry_points='''
         [console_scripts]
